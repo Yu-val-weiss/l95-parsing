@@ -3,12 +3,12 @@ from json import dump
 
 with open("task/task_raw.txt", "r") as f:
     data = f.read()
-    
+
 section_pattern = re.compile(
-    r'(\d+)\.\s+(.*?)\n'  # Section number and sentence
-    r'((?:[^\n]+\n)+?)'  # PoS tags
-    r'(\(S(?:.|\n)*?\))\n'  # Parse tree
-    r'((?:\d+\t[^\n]+\n)+)'  # Dependency relations
+    r"(\d+)\.\s+(.*?)\n"  # Section number and sentence
+    r"((?:[^\n]+\n)+?)"  # PoS tags
+    r"(\(S(?:.|\n)*?\))\n"  # Parse tree
+    r"((?:\d+\t[^\n]+\n)+)"  # Dependency relations
 )
 
 sections = section_pattern.findall(data)
@@ -22,19 +22,23 @@ for section in sections:
     pos_tags = section[2].strip()
     parse_tree = section[3].strip()
     dep_rel = section[4].strip()
-    
+
     parsed_sections[section_number] = {
         "sent": sent,
         "pos_tags": pos_tags,
         "parse_tree": parse_tree,
-        "dependencies": dep_rel
+        "dependencies": dep_rel,
     }
-    
+
 with open("task/task.json", "w") as tf:
     dump(parsed_sections, tf, indent=4)
-    
-with (open("task/sentences.txt", "w") as sf, open("task/pos_tags.txt", "w") as posf,
-      open("task/parses.txt", "w") as parsef, open("task/dep_rel.txt", "w") as df):
+
+with (
+    open("task/sentences.txt", "w") as sf,
+    open("task/pos_tags.txt", "w") as posf,
+    open("task/parses.txt", "w") as parsef,
+    open("task/dep_rel.txt", "w") as df,
+):
     files = [sf, posf, parsef, df]
     for num in parsed_sections:
         for cat, f in zip(parsed_sections[num], files):

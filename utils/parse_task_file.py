@@ -1,14 +1,17 @@
+"""Run as a script to parse the raw task file."""
+
 import re
 from json import dump
+from pathlib import Path
 
-with open("task/task_raw.txt", "r") as f:
+with Path("task/task_raw.txt").open() as f:
     data = f.read()
 
 section_pattern = re.compile(
     r"(\d+)\.\s+(.*?)\n"  # Section number and sentence
     r"((?:[^\n]+\n)+?)"  # PoS tags
     r"(\(S(?:.|\n)*?\))\n"  # Parse tree
-    r"((?:\d+\t[^\n]+\n)+)"  # Dependency relations
+    r"((?:\d+\t[^\n]+\n)+)",  # Dependency relations
 )
 
 sections = section_pattern.findall(data)
@@ -30,17 +33,17 @@ for section in sections:
         "dependencies": dep_rel,
     }
 
-with open("task/task.json", "w") as tf:
+with Path("task/task.json").open("w") as tf:
     dump(parsed_sections, tf, indent=4)
 
 with (
-    open("task/sentences.txt", "w") as sf,
-    open("task/pos_tags.txt", "w") as posf,
-    open("task/parses.txt", "w") as parsef,
-    open("task/dep_rel.txt", "w") as df,
+    Path("task/sentences.txt").open("w") as sf,
+    Path("task/pos_tags.txt").open("w") as posf,
+    Path("task/parses.txt").open("w") as parsef,
+    Path("task/dep_rel.txt").open("w") as df,
 ):
     files = [sf, posf, parsef, df]
-    for num in parsed_sections:
-        for cat, f in zip(parsed_sections[num], files):
-            f.write(parsed_sections[num][cat])
+    for section in parsed_sections.values():
+        for cat, f in zip(section, files):
+            f.write(section[cat])
             f.write("\n\n")

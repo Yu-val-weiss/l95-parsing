@@ -12,3 +12,7 @@ pandas = "^2.2.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["T201"]

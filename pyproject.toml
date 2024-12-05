@@ -1,6 +1,5 @@
 [tool.poetry]
 name = "l95-parsing"
-version = "0.1.0"
 description = "Codebase for L95 final parsing assignment"
 authors = ["Yuval Weiss"]
 readme = "README.md"

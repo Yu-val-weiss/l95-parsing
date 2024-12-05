@@ -4,12 +4,13 @@ from json import dump
 with open("task/task_raw.txt", "r") as f:
     data = f.read()
     
-section_pattern = section_pattern = re.compile(
+section_pattern = re.compile(
     r'(\d+)\.\s+(.*?)\n'  # Section number and sentence
     r'((?:[^\n]+\n)+?)'  # PoS tags
-    r'(\(S(?:.|\n)*?\.\))\n'  # Parse tree
+    r'(\(S(?:.|\n)*?\))\n'  # Parse tree
     r'((?:\d+\t[^\n]+\n)+)'  # Dependency relations
 )
+
 sections = section_pattern.findall(data)
 
 parsed_sections = {}

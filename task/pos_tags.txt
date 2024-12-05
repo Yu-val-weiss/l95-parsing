@@ -14,5 +14,7 @@ The\the\DET\DT	expected\expected\ADJ\JJ	date\date\NOUN\NN	came\come\VERB\VBD	and
 
 She\she\PRON\PRP	sighed\sigh\VERB\VBD	at\at\ADP\IN	the\the\DET\DT	irony\irony\NOUN\NN	of\of\ADP\IN	it\it\PRON\PRP	all\all\PRON\DT	,\,\PUNCT\,	the\the\DET\DT	waste\waste\NOUN\NN	of\of\ADP\IN	it\it\PRON\PRP	all\all\PRON\DT	.\.\PUNCT\.
 
+All\all\ADV\RB	through\through\ADP\IN	August\August\PROPN\NNP	the\the\DET\DT	rain\rain\NOUN\NN	hardly\hardly\ADV\RB	stopped\stop\VERB\VBD	.\.\PUNCT\.
+
 Thank\thank\VERB\VBP	the\the\DET\DT	gods\god\NOUN\NNS	he\he\PRON\PRP	did\do\AUX\VBD	n't\not\PART\RB	have\have\VERB\VB	to\to\PART\TO	know\know\VERB\VB	of\of\ADP\IN	this\this\PRON\DT	.\.\PUNCT\.
 

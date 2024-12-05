@@ -99,6 +99,22 @@
 6	went	conj	4
 7	.	punct	4
 
+1	She	nsubj	2
+2	sighed	ROOT	0
+3	at	prep	2
+4	the	det	5
+5	irony	pobj	3
+6	of	prep	5
+7	it	pobj	6
+8	all	appos	7
+9	,	punct	5
+10	the	det	11
+11	waste	appos	5
+12	of	prep	11
+13	it	pobj	12
+14	all	appos	13
+15	.	punct	2
+
 1	All	advmod	2
 2	through	prep	7
 3	August	pobj	2

@@ -44,7 +44,13 @@
     "8": {
         "sent": "She sighed at the irony of it all, the waste of it all.",
         "pos_tags": "She\\she\\PRON\\PRP\tsighed\\sigh\\VERB\\VBD\tat\\at\\ADP\\IN\tthe\\the\\DET\\DT\tirony\\irony\\NOUN\\NN\tof\\of\\ADP\\IN\tit\\it\\PRON\\PRP\tall\\all\\PRON\\DT\t,\\,\\PUNCT\\,\tthe\\the\\DET\\DT\twaste\\waste\\NOUN\\NN\tof\\of\\ADP\\IN\tit\\it\\PRON\\PRP\tall\\all\\PRON\\DT\t.\\.\\PUNCT\\.",
-        "parse_tree": "(S (NP She)\n   (VP sighed\n       (PP at\n           (NP (NP (NP the irony)\n                   (PP of\n                       (NP it all)))\n               ,\n               (NP (NP the waste)\n                   (PP of\n                       (NP it all))\n                   .)))))\n1\tShe\tnsubj\t2\n2\tsighed\tROOT\t0\n3\tat\tprep\t2\n4\tthe\tdet\t5\n5\tirony\tpobj\t3\n6\tof\tprep\t5\n7\tit\tpobj\t6\n8\tall\tappos\t7\n9\t,\tpunct\t5\n10\tthe\tdet\t11\n11\twaste\tappos\t5\n12\tof\tprep\t11\n13\tit\tpobj\t12\n14\tall\tappos\t13\n15\t.\tpunct\t2\n\n9. All through August the rain hardly stopped.\nAll\\all\\ADV\\RB\tthrough\\through\\ADP\\IN\tAugust\\August\\PROPN\\NNP\tthe\\the\\DET\\DT\train\\rain\\NOUN\\NN\thardly\\hardly\\ADV\\RB\tstopped\\stop\\VERB\\VBD\t.\\.\\PUNCT\\.\n(S (NP (NP All)\n       (PP through August\n           (NP the rain)))\n   (VP (ADVP hardly)\n       stopped)\n   .)",
+        "parse_tree": "(S (NP She)\n   (VP sighed\n       (PP at\n           (NP (NP (NP the irony)\n                   (PP of\n                       (NP it all)))\n               ,\n               (NP (NP the waste)\n                   (PP of\n                       (NP it all))\n                   .)))))",
+        "dependencies": "1\tShe\tnsubj\t2\n2\tsighed\tROOT\t0\n3\tat\tprep\t2\n4\tthe\tdet\t5\n5\tirony\tpobj\t3\n6\tof\tprep\t5\n7\tit\tpobj\t6\n8\tall\tappos\t7\n9\t,\tpunct\t5\n10\tthe\tdet\t11\n11\twaste\tappos\t5\n12\tof\tprep\t11\n13\tit\tpobj\t12\n14\tall\tappos\t13\n15\t.\tpunct\t2"
+    },
+    "9": {
+        "sent": "All through August the rain hardly stopped.",
+        "pos_tags": "All\\all\\ADV\\RB\tthrough\\through\\ADP\\IN\tAugust\\August\\PROPN\\NNP\tthe\\the\\DET\\DT\train\\rain\\NOUN\\NN\thardly\\hardly\\ADV\\RB\tstopped\\stop\\VERB\\VBD\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (NP (NP All)\n       (PP through August\n           (NP the rain)))\n   (VP (ADVP hardly)\n       stopped)\n   .)",
         "dependencies": "1\tAll\tadvmod\t2\n2\tthrough\tprep\t7\n3\tAugust\tpobj\t2\n4\tthe\tdet\t5\n5\train\tnsubj\t7\n6\thardly\tadvmod\t7\n7\tstopped\tROOT\t0\n8\t.\tpunct\t7"
     },
     "10": {

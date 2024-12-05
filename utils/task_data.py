@@ -6,8 +6,9 @@ from pathlib import Path
 
 import pandas as pd
 
-DEP_REL_COLS = ["sent_id", "word_id", "word", "deprel", "head"]
-POS_TAG_COLS = ["sent_id", "word_id", "word", "lemma", "ud_tag", "penn_tag"]
+INDEX_COLS = ["sent_id", "word_id"]
+DEP_REL_COLS = [*INDEX_COLS, "word", "deprel", "head"]
+POS_TAG_COLS = [*INDEX_COLS, "word", "lemma", "ud_tag", "penn_tag"]
 
 
 def _read_f(fp: str) -> str:
@@ -40,14 +41,15 @@ def load_dep_rel() -> pd.DataFrame:
     def rows() -> Generator[dict]:
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for line in sent.split("\n"):
+                word_id, *values = line.strip().split("\t")
                 yield dict(
                     zip(
                         DEP_REL_COLS,
-                        [sent_id, *line.strip().split("\t")],
+                        [sent_id, int(word_id), *values],
                     ),
                 )
 
-    return pd.DataFrame(rows())
+    return pd.DataFrame(rows()).set_index(INDEX_COLS)
 
 
 def load_parses() -> list[str]:
@@ -80,7 +82,7 @@ def load_pos_tags() -> pd.DataFrame:
                     ),
                 )
 
-    return pd.DataFrame(rows())
+    return pd.DataFrame(rows()).set_index(INDEX_COLS)
 
 
 def load_sentences() -> list[str]:

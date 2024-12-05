@@ -1,0 +1,129 @@
+(S (PP As
+       (S (NP she)
+          (VP walked
+              (PP past
+                  (NP it)))))
+   ,
+   (S (NP (NP the driver 's)
+          glass)
+      (VP started
+          (S (VP to
+                 (VP open)))))
+   .)
+
+(S (PP With
+       (NP a handkerchief))
+   (S (NP she)
+      (VP wiped
+          (NP the sweat)
+          (PP from
+              (NP her forehead))))
+   .)
+
+(S (S (PP Prudently)
+      ,
+      (S (NP they)
+         (VP had
+             (VP diversified
+                 (PP into
+                     (NP banking)
+                     and
+                     (NP insurance))))))
+   , and
+   (S (PP as
+          (NP a result))
+      (S (NP their influence)
+         (VP was
+             (VP felt
+                 (PP at
+                     (NP the
+                         (ADJP highest)
+                         level)))))).)
+
+(S (NP The arranged marriage)
+   (VP would
+       (VP be
+           (NP (NP the social event)
+               (PP of
+                   (NP the
+                       (ADJP following)
+                       year)))))
+   .)
+
+(S (SBAR (WHADVP When)
+         at
+         (S (PP last)
+            (S (NP she)
+               (VP spoke))))
+   ,
+   (S (NP her words)
+      (VP were
+          (ADJP (ADJP heavy)
+                and
+                (ADJP disjointed))))
+   .)
+
+(S (NP (NP The road)
+       (PP to
+           (NP the coast)))
+   (VP was
+       (ADJP busy
+             (PP with
+                 (NP traffic))
+             (PP in
+                 (NP both directions))))
+   .)
+
+(S (NP The expected date)
+   (VP (VP came)
+       and
+       (VP went))
+   .)
+
+(S (NP She)
+   (VP sighed
+       (PP at
+           (NP (NP (NP the irony)
+                   (PP of
+                       (NP it all)))
+               ,
+               (NP (NP the waste)
+                   (PP of
+                       (NP it all))
+                   .)))))
+1	She	nsubj	2
+2	sighed	ROOT	0
+3	at	prep	2
+4	the	det	5
+5	irony	pobj	3
+6	of	prep	5
+7	it	pobj	6
+8	all	appos	7
+9	,	punct	5
+10	the	det	11
+11	waste	appos	5
+12	of	prep	11
+13	it	pobj	12
+14	all	appos	13
+15	.	punct	2
+
+9. All through August the rain hardly stopped.
+All\all\ADV\RB	through\through\ADP\IN	August\August\PROPN\NNP	the\the\DET\DT	rain\rain\NOUN\NN	hardly\hardly\ADV\RB	stopped\stop\VERB\VBD	.\.\PUNCT\.
+(S (NP (NP All)
+       (PP through August
+           (NP the rain)))
+   (VP (ADVP hardly)
+       stopped)
+   .)
+
+(S (VP Thank
+       (NP (NP the gods)
+           (SBAR (S (NP he)
+                    (VP didn't
+                        (VP have
+                            (S (VP to
+                                   (VP know
+                                       (PP of
+                                           (NP this)))))))))))
+   .)
+

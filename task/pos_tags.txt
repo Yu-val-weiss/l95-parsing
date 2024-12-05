@@ -1,0 +1,18 @@
+As\as\SCONJ\IN	she\she\PRON\PRP	walked\walk\VERB\VBD	past\past\ADP\IN	it\it\PRON\PRP	,\,\PUNCT\,	the\the\DET\DT	driver\driver\NOUN\NN	's\'s\PART\POS	glass\glass\NOUN\NN	started\start\VERB\VBD	to\to\PART\TO	open\open\VERB\VB	.\.\PUNCT\.
+
+With\with\ADP\IN	a\a\DET\DT	handkerchief\handkerchief\NOUN\NN	she\she\PRON\PRP	wiped\wipe\VERB\VBD	the\the\DET\DT	sweat\sweat\NOUN\NN	from\from\ADP\IN	her\her\PRON\PRP$	forehead\forehead\NOUN\NN	.\.\PUNCT\.
+
+Prudently\prudently\ADV\RB	,\,\PUNCT\,	they\they\PRON\PRP	had\have\AUX\VBD	diversified\diversify\VERB\VBN	into\into\ADP\IN	banking\banking\NOUN\NN	and\and\CCONJ\CC	insurance\insurance\NOUN\NN	,\,\PUNCT\,	and\and\CCONJ\CC	as\as\ADP\IN	a\a\DET\DT	result\result\NOUN\NN	their\their\PRON\PRP$	influence\influence\NOUN\NN	was\be\AUX\VBD	felt\feel\VERB\VBN	at\at\ADP\IN	the\the\DET\DT	highest\high\ADJ\JJS	level\level\NOUN\NN	.\.\PUNCT\.
+
+The\the\DET\DT	arranged\arrange\VERB\VBN	marriage\marriage\NOUN\NN	would\would\AUX\MD	be\be\AUX\VB	the\the\DET\DT	social\social\ADJ\JJ	event\event\NOUN\NN	of\of\ADP\IN	the\the\DET\DT	following\following\ADJ\JJ	year\year\NOUN\NN	.\.\PUNCT\.
+
+When\when\SCONJ\WRB	at\at\ADP\IN	last\last\ADV\RB	she\she\PRON\PRP	spoke\speak\VERB\VBD	,\,\PUNCT\,	her\her\PRON\PRP$	words\word\NOUN\NNS	were\be\AUX\VBD	heavy\heavy\ADJ\JJ	and\and\CCONJ\CC	disjointed\disjointed\ADJ\JJ	.\.\PUNCT\.
+
+The\the\DET\DT	road\road\NOUN\NN	to\to\ADP\IN	the\the\DET\DT	coast\coast\NOUN\NN	was\be\AUX\VBD	busy\busy\ADJ\JJ	with\with\ADP\IN	traffic\traffic\NOUN\NN	in\in\ADP\IN	both\both\DET\DT	directions\direction\NOUN\NNS	.\.\PUNCT\.
+
+The\the\DET\DT	expected\expected\ADJ\JJ	date\date\NOUN\NN	came\come\VERB\VBD	and\and\CCONJ\CC	went\go\VERB\VBD	.\.\PUNCT\.
+
+She\she\PRON\PRP	sighed\sigh\VERB\VBD	at\at\ADP\IN	the\the\DET\DT	irony\irony\NOUN\NN	of\of\ADP\IN	it\it\PRON\PRP	all\all\PRON\DT	,\,\PUNCT\,	the\the\DET\DT	waste\waste\NOUN\NN	of\of\ADP\IN	it\it\PRON\PRP	all\all\PRON\DT	.\.\PUNCT\.
+
+Thank\thank\VERB\VBP	the\the\DET\DT	gods\god\NOUN\NNS	he\he\PRON\PRP	did\do\AUX\VBD	n't\not\PART\RB	have\have\VERB\VB	to\to\PART\TO	know\know\VERB\VB	of\of\ADP\IN	this\this\PRON\DT	.\.\PUNCT\.
+

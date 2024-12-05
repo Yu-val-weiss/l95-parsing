@@ -1,0 +1,56 @@
+{
+    "1": {
+        "sent": "As she walked past it, the driver's glass started to open.",
+        "pos_tags": "As\\as\\SCONJ\\IN\tshe\\she\\PRON\\PRP\twalked\\walk\\VERB\\VBD\tpast\\past\\ADP\\IN\tit\\it\\PRON\\PRP\t,\\,\\PUNCT\\,\tthe\\the\\DET\\DT\tdriver\\driver\\NOUN\\NN\t's\\'s\\PART\\POS\tglass\\glass\\NOUN\\NN\tstarted\\start\\VERB\\VBD\tto\\to\\PART\\TO\topen\\open\\VERB\\VB\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (PP As\n       (S (NP she)\n          (VP walked\n              (PP past\n                  (NP it)))))\n   ,\n   (S (NP (NP the driver 's)\n          glass)\n      (VP started\n          (S (VP to\n                 (VP open)))))\n   .)",
+        "dependencies": "1\tAs\tmark\t3\n2\tshe\tnsubj\t3\n3\twalked\tadvcl\t11\n4\tpast\tprep\t3\n5\tit\tpobj\t4\n6\t,\tpunct\t11\n7\tthe\tdet\t8\n8\tdriver\tposs\t10\n9\t's\tcase\t8\n10\tglass\tnsubj\t11\n11\tstarted\tROOT\t0\n12\tto\taux\t13\n13\topen\txcomp\t11\n14\t.\tpunct\t11"
+    },
+    "2": {
+        "sent": "With a handkerchief she wiped the sweat from her forehead.",
+        "pos_tags": "With\\with\\ADP\\IN\ta\\a\\DET\\DT\thandkerchief\\handkerchief\\NOUN\\NN\tshe\\she\\PRON\\PRP\twiped\\wipe\\VERB\\VBD\tthe\\the\\DET\\DT\tsweat\\sweat\\NOUN\\NN\tfrom\\from\\ADP\\IN\ther\\her\\PRON\\PRP$\tforehead\\forehead\\NOUN\\NN\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (PP With\n       (NP a handkerchief))\n   (S (NP she)\n      (VP wiped\n          (NP the sweat)\n          (PP from\n              (NP her forehead))))\n   .)",
+        "dependencies": "1\tWith\tprep\t5\n2\ta\tdet\t3\n3\thandkerchief\tpobj\t1\n4\tshe\tnsubj\t5\n5\twiped\tROOT\t0\n6\tthe\tdet\t7\n7\tsweat\tdobj\t5\n8\tfrom\tprep\t5\n9\ther\tposs\t10\n10\tforehead\tpobj\t8\n11\t.\tpunct\t5"
+    },
+    "3": {
+        "sent": "Prudently, they had diversified into banking and insurance, and as a result their influence was felt at the highest level.",
+        "pos_tags": "Prudently\\prudently\\ADV\\RB\t,\\,\\PUNCT\\,\tthey\\they\\PRON\\PRP\thad\\have\\AUX\\VBD\tdiversified\\diversify\\VERB\\VBN\tinto\\into\\ADP\\IN\tbanking\\banking\\NOUN\\NN\tand\\and\\CCONJ\\CC\tinsurance\\insurance\\NOUN\\NN\t,\\,\\PUNCT\\,\tand\\and\\CCONJ\\CC\tas\\as\\ADP\\IN\ta\\a\\DET\\DT\tresult\\result\\NOUN\\NN\ttheir\\their\\PRON\\PRP$\tinfluence\\influence\\NOUN\\NN\twas\\be\\AUX\\VBD\tfelt\\feel\\VERB\\VBN\tat\\at\\ADP\\IN\tthe\\the\\DET\\DT\thighest\\high\\ADJ\\JJS\tlevel\\level\\NOUN\\NN\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (S (PP Prudently)\n      ,\n      (S (NP they)\n         (VP had\n             (VP diversified\n                 (PP into\n                     (NP banking)\n                     and\n                     (NP insurance))))))\n   , and\n   (S (PP as\n          (NP a result))\n      (S (NP their influence)\n         (VP was\n             (VP felt\n                 (PP at\n                     (NP the\n                         (ADJP highest)\n                         level)))))).)",
+        "dependencies": "1\tPrudently\tadvmod\t5\n2\t,\tpunct\t5\n3\tthey\tnsubj\t5\n4\thad\taux\t5\n5\tdiversified\tROOT\t0\n6\tinto\tprep\t5\n7\tbanking\tpobj\t6\n8\tand\tcc\t7\n9\tinsurance\tconj\t7\n10\t,\tpunct\t5\n11\tand\tcc\t5\n12\tas\tprep\t18\n13\ta\tdet\t14\n14\tresult\tpobj\t12\n15\ttheir\tposs\t16\n16\tinfluence\tnsubjpass\t18\n17\twas\tauxpass\t18\n18\tfelt\tconj\t5\n19\tat\tprep\t18\n20\tthe\tdet\t22\n21\thighest\tamod\t22\n22\tlevel\tpobj\t19\n23\t.\tpunct\t18"
+    },
+    "4": {
+        "sent": "The arranged marriage would be the social event of the following year.",
+        "pos_tags": "The\\the\\DET\\DT\tarranged\\arrange\\VERB\\VBN\tmarriage\\marriage\\NOUN\\NN\twould\\would\\AUX\\MD\tbe\\be\\AUX\\VB\tthe\\the\\DET\\DT\tsocial\\social\\ADJ\\JJ\tevent\\event\\NOUN\\NN\tof\\of\\ADP\\IN\tthe\\the\\DET\\DT\tfollowing\\following\\ADJ\\JJ\tyear\\year\\NOUN\\NN\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (NP The arranged marriage)\n   (VP would\n       (VP be\n           (NP (NP the social event)\n               (PP of\n                   (NP the\n                       (ADJP following)\n                       year)))))\n   .)",
+        "dependencies": "1\tThe\tdet\t3\n2\tarranged\tamod\t3\n3\tmarriage\tnsubj\t5\n4\twould\taux\t5\n5\tbe\tROOT\t0\n6\tthe\tdet\t8\n7\tsocial\tamod\t8\n8\tevent\tattr\t5\n9\tof\tprep\t8\n10\tthe\tdet\t12\n11\tfollowing\tamod\t12\n12\tyear\tpobj\t9\n13\t.\tpunct\t5"
+    },
+    "5": {
+        "sent": "When at last she spoke, her words were heavy and disjointed.",
+        "pos_tags": "When\\when\\SCONJ\\WRB\tat\\at\\ADP\\IN\tlast\\last\\ADV\\RB\tshe\\she\\PRON\\PRP\tspoke\\speak\\VERB\\VBD\t,\\,\\PUNCT\\,\ther\\her\\PRON\\PRP$\twords\\word\\NOUN\\NNS\twere\\be\\AUX\\VBD\theavy\\heavy\\ADJ\\JJ\tand\\and\\CCONJ\\CC\tdisjointed\\disjointed\\ADJ\\JJ\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (SBAR (WHADVP When)\n         at\n         (S (PP last)\n            (S (NP she)\n               (VP spoke))))\n   ,\n   (S (NP her words)\n      (VP were\n          (ADJP (ADJP heavy)\n                and\n                (ADJP disjointed))))\n   .)",
+        "dependencies": "1\tWhen\tadvmod\t5\n2\tat\tadvmod\t3\n3\tlast\tadvmod\t5\n4\tshe\tnsubj\t5\n5\tspoke\tadvcl\t9\n6\t,\tpunct\t9\n7\ther\tposs\t8\n8\twords\tnsubj\t9\n9\twere\tROOT\t0\n10\theavy\tacomp\t9\n11\tand\tcc\t10\n12\tdisjointed\tconj\t10\n13\t.\tpunct\t9"
+    },
+    "6": {
+        "sent": "The road to the coast was busy with traffic in both directions.",
+        "pos_tags": "The\\the\\DET\\DT\troad\\road\\NOUN\\NN\tto\\to\\ADP\\IN\tthe\\the\\DET\\DT\tcoast\\coast\\NOUN\\NN\twas\\be\\AUX\\VBD\tbusy\\busy\\ADJ\\JJ\twith\\with\\ADP\\IN\ttraffic\\traffic\\NOUN\\NN\tin\\in\\ADP\\IN\tboth\\both\\DET\\DT\tdirections\\direction\\NOUN\\NNS\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (NP (NP The road)\n       (PP to\n           (NP the coast)))\n   (VP was\n       (ADJP busy\n             (PP with\n                 (NP traffic))\n             (PP in\n                 (NP both directions))))\n   .)",
+        "dependencies": "1\tThe\tdet\t2\n2\troad\tnsubj\t6\n3\tto\tprep\t2\n4\tthe\tdet\t5\n5\tcoast\tpobj\t3\n6\twas\tROOT\t0\n7\tbusy\tacomp\t6\n8\twith\tprep\t7\n9\ttraffic\tpobj\t8\n10\tin\tprep\t9\n11\tboth\tdet\t12\n12\tdirections\tpobj\t10\n13\t.\tpunct\t6"
+    },
+    "7": {
+        "sent": "The expected date came and went.",
+        "pos_tags": "The\\the\\DET\\DT\texpected\\expected\\ADJ\\JJ\tdate\\date\\NOUN\\NN\tcame\\come\\VERB\\VBD\tand\\and\\CCONJ\\CC\twent\\go\\VERB\\VBD\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (NP The expected date)\n   (VP (VP came)\n       and\n       (VP went))\n   .)",
+        "dependencies": "1\tThe\tdet\t3\n2\texpected\tamod\t3\n3\tdate\tnsubj\t4\n4\tcame\tROOT\t0\n5\tand\tcc\t4\n6\twent\tconj\t4\n7\t.\tpunct\t4"
+    },
+    "8": {
+        "sent": "She sighed at the irony of it all, the waste of it all.",
+        "pos_tags": "She\\she\\PRON\\PRP\tsighed\\sigh\\VERB\\VBD\tat\\at\\ADP\\IN\tthe\\the\\DET\\DT\tirony\\irony\\NOUN\\NN\tof\\of\\ADP\\IN\tit\\it\\PRON\\PRP\tall\\all\\PRON\\DT\t,\\,\\PUNCT\\,\tthe\\the\\DET\\DT\twaste\\waste\\NOUN\\NN\tof\\of\\ADP\\IN\tit\\it\\PRON\\PRP\tall\\all\\PRON\\DT\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (NP She)\n   (VP sighed\n       (PP at\n           (NP (NP (NP the irony)\n                   (PP of\n                       (NP it all)))\n               ,\n               (NP (NP the waste)\n                   (PP of\n                       (NP it all))\n                   .)))))\n1\tShe\tnsubj\t2\n2\tsighed\tROOT\t0\n3\tat\tprep\t2\n4\tthe\tdet\t5\n5\tirony\tpobj\t3\n6\tof\tprep\t5\n7\tit\tpobj\t6\n8\tall\tappos\t7\n9\t,\tpunct\t5\n10\tthe\tdet\t11\n11\twaste\tappos\t5\n12\tof\tprep\t11\n13\tit\tpobj\t12\n14\tall\tappos\t13\n15\t.\tpunct\t2\n\n9. All through August the rain hardly stopped.\nAll\\all\\ADV\\RB\tthrough\\through\\ADP\\IN\tAugust\\August\\PROPN\\NNP\tthe\\the\\DET\\DT\train\\rain\\NOUN\\NN\thardly\\hardly\\ADV\\RB\tstopped\\stop\\VERB\\VBD\t.\\.\\PUNCT\\.\n(S (NP (NP All)\n       (PP through August\n           (NP the rain)))\n   (VP (ADVP hardly)\n       stopped)\n   .)",
+        "dependencies": "1\tAll\tadvmod\t2\n2\tthrough\tprep\t7\n3\tAugust\tpobj\t2\n4\tthe\tdet\t5\n5\train\tnsubj\t7\n6\thardly\tadvmod\t7\n7\tstopped\tROOT\t0\n8\t.\tpunct\t7"
+    },
+    "10": {
+        "sent": "Thank the gods he didn't have to know of this.",
+        "pos_tags": "Thank\\thank\\VERB\\VBP\tthe\\the\\DET\\DT\tgods\\god\\NOUN\\NNS\the\\he\\PRON\\PRP\tdid\\do\\AUX\\VBD\tn't\\not\\PART\\RB\thave\\have\\VERB\\VB\tto\\to\\PART\\TO\tknow\\know\\VERB\\VB\tof\\of\\ADP\\IN\tthis\\this\\PRON\\DT\t.\\.\\PUNCT\\.",
+        "parse_tree": "(S (VP Thank\n       (NP (NP the gods)\n           (SBAR (S (NP he)\n                    (VP didn't\n                        (VP have\n                            (S (VP to\n                                   (VP know\n                                       (PP of\n                                           (NP this)))))))))))\n   .)",
+        "dependencies": "1\tThank\tROOT\t0\n2\tthe\tdet\t3\n3\tgods\tdobj\t1\n4\the\tnsubj\t7\n5\tdid\taux\t7\n6\tn't\tneg\t7\n7\thave\tccomp\t1\n8\tto\taux\t9\n9\tknow\txcomp\t7\n10\tof\tprep\t9\n11\tthis\tpobj\t10\n12\t.\tpunct\t1"
+    }
+}

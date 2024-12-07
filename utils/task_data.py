@@ -7,8 +7,8 @@ from pathlib import Path
 import pandas as pd
 
 INDEX_COLS = ["sent_id", "word_id"]
-DEP_REL_COLS = [*INDEX_COLS, "word", "deprel", "head"]
-POS_TAG_COLS = [*INDEX_COLS, "word", "lemma", "ud_tag", "penn_tag"]
+DEP_REL_COLS = ["word", "deprel", "head"]
+POS_TAG_COLS = ["word", "lemma", "ud_tag", "penn_tag"]
 
 
 def _read_f(fp: str) -> str:
@@ -34,6 +34,7 @@ def load_dep_rel() -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing dependency relations.
         Columns are defined in `DEP_REL_COLS` above.
+        Includes a `MultiIndex` made up of `INDEX_COLS`.
 
     """
     data = _read_f("task/dep_rel.txt")
@@ -41,11 +42,11 @@ def load_dep_rel() -> pd.DataFrame:
     def rows() -> Generator[dict]:
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for line in sent.split("\n"):
-                word_id, *values = line.strip().split("\t")
+                word_id, word, deprel, head = line.strip().split("\t")
                 yield dict(
                     zip(
-                        DEP_REL_COLS,
-                        [sent_id, int(word_id), *values],
+                        INDEX_COLS + DEP_REL_COLS,
+                        [sent_id, int(word_id), word, deprel, int(head)],
                     ),
                 )
 
@@ -68,6 +69,7 @@ def load_pos_tags() -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing part-of-speech tags.
         Columns are defined in `POS_TAG_COLS` above.
+        Includes a `MultiIndex` made up of `INDEX_COLS`.
 
     """
     data = _read_f("task/pos_tags.txt")
@@ -77,7 +79,7 @@ def load_pos_tags() -> pd.DataFrame:
             for word_id, tagged_word in enumerate(sent.split("\t"), start=1):
                 yield dict(
                     zip(
-                        POS_TAG_COLS,
+                        INDEX_COLS + POS_TAG_COLS,
                         [sent_id, word_id, *tagged_word.strip().split("\\")],
                     ),
                 )

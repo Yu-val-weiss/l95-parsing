@@ -9,6 +9,7 @@ package-mode = false
 python = "^3.13"
 pandas = "^2.2.3"
 networkx = "^3.4.2"
+matplotlib = "^3.9.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -16,4 +17,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["T201"]
+ignore = ["T201", "ERA001", "PGH003"]

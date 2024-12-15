@@ -48,22 +48,28 @@ def graph_to_latex(g: nx.DiGraph) -> str:
     return to_latex(g, as_document=False)
 
 
-def df_to_tikz_dependency(df: pd.DataFrame, sent_id: int) -> str:
+def df_to_tikz_dependency(
+    df: pd.DataFrame,
+    sent_id: int,
+    *,
+    copy_to_clipboard: bool = False,
+) -> str:
     """Convert a sentence in a dataframe to a tikz-dependency graph.
 
     Args:
-        df (pd.DataFrame): _description_
-        sent_id (int): _description_
+        df (pd.DataFrame): Dependency relation DataFrame
+        sent_id (int): Index of the sentence to graph
+        copy_to_clipboard (bool, optional): Set to true to copy
+        the LaTeX string to clipboard.
 
     Returns:
         str: the LaTeX string defining the dependence graph.
-        The string is copied to the clipboard.
+        The string is optionally copied to the clipboard.
 
     """
     sent = df.loc[sent_id]
 
-    latex_str = "\\begin{dependency} % see here for documentation\n"
-    latex_str += "% https://gb.mirrors.cicku.me/ctan/graphics/pgf/contrib/tikz-dependency/tikz-dependency-doc.pdf\n"
+    latex_str = "\\begin{dependency}\n"
     latex_str += "\t\\begin{deptext}[column sep=1em]\n"
 
     deptext = []
@@ -86,8 +92,9 @@ def df_to_tikz_dependency(df: pd.DataFrame, sent_id: int) -> str:
 
     latex_str += "\n\\end{dependency}"
 
-    pyperclip.copy(latex_str)
-    print("Copied LaTeX string to clipboard!")
+    if copy_to_clipboard:
+        pyperclip.copy(latex_str)
+        print("Copied LaTeX string to clipboard!")
 
     return latex_str
 

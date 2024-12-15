@@ -12,6 +12,7 @@ networkx = "^3.4.2"
 matplotlib = "^3.9.3"
 pyperclip = "^1.9.0"
 spacy = "^3.8.3"
+stanza = "^1.9.2"
 
 [build-system]
 requires = ["poetry-core"]

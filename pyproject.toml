@@ -11,6 +11,7 @@ pandas = "^2.2.3"
 networkx = "^3.4.2"
 matplotlib = "^3.9.3"
 pyperclip = "^1.9.0"
+spacy = "^3.8.3"
 
 [build-system]
 requires = ["poetry-core"]

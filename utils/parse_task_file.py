@@ -4,6 +4,11 @@ import re
 from json import dump
 from pathlib import Path
 
+from depedit import DepEdit
+
+from utils.conllu import convert_to_dep_rel, generate_conll, load_conll
+from utils.task_data import dump_dep_rel
+
 with Path("task_files/task_raw.txt").open() as f:
     data = f.read()
 
@@ -47,3 +52,12 @@ with (
         for cat, f in zip(section, files):
             f.write(section[cat])
             f.write("\n\n")
+
+generate_conll()
+dep = DepEdit("utils/stan2uni.ini")
+with Path("task_files/task.conllu").open() as f:
+    fixed = dep.run_depedit(infile=f.read())
+with Path("task_files/task_fixed.conllu").open("w") as f:
+    f.write(fixed)
+fixed_df = load_conll("task_files/task_fixed.conllu")
+dump_dep_rel(convert_to_dep_rel(fixed_df), "task_files/dep_rel_fixed.txt")

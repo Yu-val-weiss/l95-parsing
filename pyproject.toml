@@ -14,6 +14,7 @@ pyperclip = "^1.9.0"
 spacy = "^3.8.3"
 stanza = "^1.9.2"
 prettytable = "^3.12.0"
+depedit = "^3.4.0.1"
 
 [build-system]
 requires = ["poetry-core"]

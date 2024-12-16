@@ -45,6 +45,32 @@ def load_dep_rel(file: str = "task_files/dep_rel.txt") -> pd.DataFrame:
     return pd.DataFrame(rows(), columns=INDEX_COLS + DEP_REL_COLS).set_index(INDEX_COLS)
 
 
+def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
+    """Dump dependence relation DataFrame to file.
+
+    Args:
+        dep_rel_df (pd.DataFrame): DataFrame to dump.
+        file (str): Where to dump.
+
+    """
+    x = [
+        df.reset_index(level="sent_id", drop=True).to_csv(
+            header=False,
+            index=True,
+            sep="\t",
+            quotechar="`",
+        )
+        for _, df in dep_rel_df.groupby(level="sent_id")
+    ]
+    s = "\n\n".join(x).strip() + "\n\n"
+
+    file_path = Path(file)
+    file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
+
+    with file_path.open("w") as f:
+        f.write(s)
+
+
 def load_parses(file: str = "task_files/parses.txt") -> list[str]:
     """Load parse tree file.
 
@@ -74,6 +100,27 @@ def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
     return pd.DataFrame(rows(), columns=INDEX_COLS + POS_TAG_COLS).set_index(INDEX_COLS)
 
 
+def dump_pos_tags(pos_tag_df: pd.DataFrame, file: str) -> None:
+    """Dump dependence relation DataFrame to file.
+
+    Args:
+        pos_tag_df (pd.DataFrame): DataFrame to dump.
+        file (str): Where to dump.
+
+    """
+    x = [
+        "\t".join(["\\".join(t) for t in df.itertuples(index=False)])
+        for _, df in pos_tag_df.groupby(level="sent_id")
+    ]
+    s = "\n\n".join(x).strip() + "\n\n"
+
+    file_path = Path(file)
+    file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
+
+    with file_path.open("w") as f:
+        f.write(s)
+
+
 def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
     """Load sentences into a list.
 
@@ -85,4 +132,4 @@ def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
 
 
 if __name__ == "__main__":
-    print(load_dep_rel())
+    x = load_pos_tags()

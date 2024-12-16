@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple
 from prettytable import PrettyTable
 
 from task.predict import DataFrameFormat, DependencyParser
-from utils.task_data import load_dep_rel, load_sentences
+from utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -123,7 +123,7 @@ def eval_dep_rel(
     logger.info("...sentences parsed!")
 
     if save_predictions is not None:
-        pass
+        dump_dep_rel(result, save_predictions)
 
     logger.info("Evaluating...")
 
@@ -157,7 +157,7 @@ def df_to_labelled_heads(df: pd.DataFrame) -> set[tuple[int, int, str, int]]:
         set[tuple[int, int, str, int]]: A set of (sent_id, word_id, deprel, head) tuples
 
     """
-    return {(*row.Index, row.deprel, row.head) for row in df.itertuples()}  # type: ignore
+    return {(*row.Index, row.deprel.lower(), row.head) for row in df.itertuples()}  # type: ignore
 
 
 def df_to_unlabelled_heads(df: pd.DataFrame) -> set[tuple[int, int, int]]:
@@ -183,8 +183,8 @@ def df_to_labels(df: pd.DataFrame) -> set[tuple[int, int, str]]:
         set[tuple[int, int, str]]: A set of (sent_id, word_id, deprel) tuples
 
     """
-    return {(*row.Index, row.deprel) for row in df.itertuples()}  # type: ignore
+    return {(*row.Index, row.deprel.lower()) for row in df.itertuples()}  # type: ignore
 
 
 if __name__ == "__main__":
-    eval_dep_rel()
+    eval_dep_rel(save_predictions="prediction_files/dep_rel.txt")

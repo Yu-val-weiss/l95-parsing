@@ -6,9 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-INDEX_COLS = ["sent_id", "word_id"]
-DEP_REL_COLS = ["word", "deprel", "head"]
-POS_TAG_COLS = ["word", "lemma", "ud_tag", "penn_tag"]
+from utils import DEP_REL_COLS, INDEX_COLS, POS_TAG_COLS
 
 
 def _read_f(fp: str) -> str:
@@ -39,7 +37,7 @@ def load_dep_rel() -> pd.DataFrame:
     """
     data = _read_f("task/dep_rel.txt")
 
-    def rows() -> Generator[dict]:
+    def rows():
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for line in sent.split("\n"):
                 word_id, word, deprel, head = line.strip().split("\t")
@@ -74,7 +72,7 @@ def load_pos_tags() -> pd.DataFrame:
     """
     data = _read_f("task/pos_tags.txt")
 
-    def rows() -> Generator[dict]:
+    def rows():
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for word_id, tagged_word in enumerate(sent.split("\t"), start=1):
                 yield dict(

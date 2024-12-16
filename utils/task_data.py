@@ -13,14 +13,14 @@ def _read_f(fp: str) -> str:
         return f.read().strip()
 
 
-def load_task() -> dict[int, dict]:
+def load_task(file: str = "task_files/task.json") -> dict[int, dict]:
     """Load task JSON.
 
     Returns:
         dict: Task loaded as dictionary
 
     """
-    with Path("task_files/task.json").open() as f:
+    with Path(file).open() as f:
         j = json.load(f)
     return {int(k): v for k, v in j.items()}
 
@@ -45,14 +45,14 @@ def load_dep_rel(file: str = "task_files/dep_rel.txt") -> pd.DataFrame:
     return pd.DataFrame(rows(), columns=INDEX_COLS + DEP_REL_COLS).set_index(INDEX_COLS)
 
 
-def load_parses() -> list[str]:
+def load_parses(file: str = "task_files/parses.txt") -> list[str]:
     """Load parse tree file.
 
     Returns:
         list[str]: List of parse trees
 
     """
-    return _read_f("task_files/parses.txt").split("\n\n")
+    return _read_f(file).split("\n\n")
 
 
 def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
@@ -74,14 +74,14 @@ def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
     return pd.DataFrame(rows(), columns=INDEX_COLS + POS_TAG_COLS).set_index(INDEX_COLS)
 
 
-def load_sentences() -> list[str]:
+def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
     """Load sentences into a list.
 
     Returns:
         list[str]: list of sentences.
 
     """
-    return _read_f("task_files/sentences.txt").split("\n\n")
+    return _read_f(file).split("\n\n")
 
 
 if __name__ == "__main__":

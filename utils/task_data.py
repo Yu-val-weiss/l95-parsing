@@ -20,12 +20,12 @@ def load_task() -> dict[int, dict]:
         dict: Task loaded as dictionary
 
     """
-    with Path("task/task.json").open() as f:
+    with Path("task_files/task.json").open() as f:
         j = json.load(f)
     return {int(k): v for k, v in j.items()}
 
 
-def load_dep_rel(file: str = "task/dep_rel.txt") -> pd.DataFrame:
+def load_dep_rel(file: str = "task_files/dep_rel.txt") -> pd.DataFrame:
     """Load dependency relation tag file.
 
     Returns:
@@ -52,10 +52,10 @@ def load_parses() -> list[str]:
         list[str]: List of parse trees
 
     """
-    return _read_f("task/parses.txt").split("\n\n")
+    return _read_f("task_files/parses.txt").split("\n\n")
 
 
-def load_pos_tags(file: str = "task/pos_tags.txt") -> pd.DataFrame:
+def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
     """Load pos tag file.
 
     Returns:
@@ -81,7 +81,7 @@ def load_sentences() -> list[str]:
         list[str]: list of sentences.
 
     """
-    return _read_f("task/sentences.txt").split("\n\n")
+    return _read_f("task_files/sentences.txt").split("\n\n")
 
 
 if __name__ == "__main__":

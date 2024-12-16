@@ -1,7 +1,6 @@
 """Data utils for each of the task files."""
 
 import json
-from collections.abc import Generator
 from pathlib import Path
 
 import pandas as pd
@@ -26,7 +25,7 @@ def load_task() -> dict[int, dict]:
     return {int(k): v for k, v in j.items()}
 
 
-def load_dep_rel() -> pd.DataFrame:
+def load_dep_rel(file: str = "task/dep_rel.txt") -> pd.DataFrame:
     """Load dependency relation tag file.
 
     Returns:
@@ -35,20 +34,15 @@ def load_dep_rel() -> pd.DataFrame:
         Includes a `MultiIndex` made up of `INDEX_COLS`.
 
     """
-    data = _read_f("task/dep_rel.txt")
+    data = _read_f(file)
 
     def rows():
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for line in sent.split("\n"):
                 word_id, word, deprel, head = line.strip().split("\t")
-                yield dict(
-                    zip(
-                        INDEX_COLS + DEP_REL_COLS,
-                        [sent_id, int(word_id), word, deprel, int(head)],
-                    ),
-                )
+                yield [sent_id, int(word_id), word, deprel, int(head)]
 
-    return pd.DataFrame(rows()).set_index(INDEX_COLS)
+    return pd.DataFrame(rows(), columns=INDEX_COLS + DEP_REL_COLS).set_index(INDEX_COLS)
 
 
 def load_parses() -> list[str]:
@@ -61,7 +55,7 @@ def load_parses() -> list[str]:
     return _read_f("task/parses.txt").split("\n\n")
 
 
-def load_pos_tags() -> pd.DataFrame:
+def load_pos_tags(file: str = "task/pos_tags.txt") -> pd.DataFrame:
     """Load pos tag file.
 
     Returns:
@@ -70,19 +64,14 @@ def load_pos_tags() -> pd.DataFrame:
         Includes a `MultiIndex` made up of `INDEX_COLS`.
 
     """
-    data = _read_f("task/pos_tags.txt")
+    data = _read_f(file)
 
     def rows():
         for sent_id, sent in enumerate(data.split("\n\n"), start=1):
             for word_id, tagged_word in enumerate(sent.split("\t"), start=1):
-                yield dict(
-                    zip(
-                        INDEX_COLS + POS_TAG_COLS,
-                        [sent_id, word_id, *tagged_word.strip().split("\\")],
-                    ),
-                )
+                yield [sent_id, word_id, *tagged_word.strip().split("\\")]
 
-    return pd.DataFrame(rows()).set_index(INDEX_COLS)
+    return pd.DataFrame(rows(), columns=INDEX_COLS + POS_TAG_COLS).set_index(INDEX_COLS)
 
 
 def load_sentences() -> list[str]:

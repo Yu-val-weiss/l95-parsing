@@ -1,11 +1,17 @@
 """Utils specifically for dependency relations."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import networkx as nx
-import pandas as pd
 import pyperclip
 from networkx.drawing.nx_latex import to_latex
 
 from utils.task_data import load_dep_rel
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def create_graph(df: pd.DataFrame, sent_id: int) -> nx.DiGraph:

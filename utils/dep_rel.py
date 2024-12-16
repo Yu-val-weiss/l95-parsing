@@ -83,7 +83,8 @@ def df_to_tikz_dependency(
         else:
             depedges.append(f"\t\\depedge{{{t.head}}}{{{t.Index}}}{{{t.deprel}}}")
 
-    latex_str += f"\t\t{' \\& '.join(deptext)} \\\\"
+    depstr = " \\& ".join(deptext)
+    latex_str += f"\t\t{depstr} \\\\"
     latex_str += "\t\\end{deptext}\n"
 
     latex_str += "\n".join(depedges) + "\n"

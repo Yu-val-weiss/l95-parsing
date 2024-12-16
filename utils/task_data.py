@@ -25,7 +25,7 @@ def load_task(file: str = "task_files/task.json") -> dict[int, dict]:
     return {int(k): v for k, v in j.items()}
 
 
-def load_dep_rel(file: str = "task_files/dep_rel.txt") -> pd.DataFrame:
+def load_dep_rel(file: str = "task_files/dep_rel_fixed.txt") -> pd.DataFrame:
     """Load dependency relation tag file.
 
     Returns:
@@ -62,7 +62,7 @@ def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
         )
         for _, df in dep_rel_df.groupby(level="sent_id")
     ]
-    s = "\n\n".join(x).strip() + "\n\n"
+    s = "\n".join(x).strip() + "\n\n"
 
     file_path = Path(file)
     file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
@@ -132,4 +132,5 @@ def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
 
 
 if __name__ == "__main__":
-    x = load_pos_tags()
+    d = load_dep_rel()
+    dump_dep_rel(d, "task_files/dep_rel.txt")

@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, NamedTuple
 
+import click
 from prettytable import PrettyTable
 
 from task.predict import DataFrameFormat, DependencyParser
@@ -93,13 +94,33 @@ class DependencyRelationScore(NamedTuple):
         return table.get_string()
 
 
+@click.command(name="dep_rel")
+@click.option(
+    "--sentences-file",
+    default=None,
+    type=click.Path(exists=True),
+    help="Path to the sentences file for evaluation.",
+)
+@click.option(
+    "--gold-file",
+    default=None,
+    type=click.Path(exists=True),
+    help="Path to the gold dependency relations file.",
+)
+@click.option(
+    "--save-predictions",
+    default=None,
+    type=click.Path(),
+    help="Path to save the prediction results.",
+)
 def eval_dep_rel(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
 ) -> DependencyRelationScore:
-    """Evaluate the dependency relation parse.
+    """Evaluate the Stanza's dependency relation parsing.
 
+    \f
     Args:
         sentences_file (None | str, optional): The sentences file to predict on.
         Defaults to the one is task_files.
@@ -142,8 +163,8 @@ def eval_dep_rel(
     )
 
     logger.info("...evaluation complete!")
-    print(res.pretty_string())
 
+    print(res.pretty_string())
     return res
 
 
@@ -186,5 +207,12 @@ def df_to_labels(df: pd.DataFrame) -> set[tuple[int, int, str]]:
     return {(*row.Index, row.deprel.lower()) for row in df.itertuples()}  # type: ignore
 
 
+@click.group()
+def cli() -> None:
+    """Run evaluation CLI for dependency parsing and."""
+
+
+cli.add_command(eval_dep_rel)
+
 if __name__ == "__main__":
-    eval_dep_rel(save_predictions="prediction_files/dep_rel.txt")
+    cli()

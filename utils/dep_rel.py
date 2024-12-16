@@ -85,7 +85,7 @@ def df_to_tikz_dependency(
 
     depstr = " \\& ".join(deptext)
     latex_str += f"\t\t{depstr} \\\\"
-    latex_str += "\t\\end{deptext}\n"
+    latex_str += "\n\t\\end{deptext}\n"
 
     latex_str += "\n".join(depedges) + "\n"
 
@@ -104,4 +104,4 @@ if __name__ == "__main__":
     dep_rel_df = load_dep_rel()
     # print(dep_rel_df.loc[1])
     # g = create_graph(dep_rel_df, 1)
-    print(df_to_tikz_dependency(dep_rel_df, 1))
+    print(df_to_tikz_dependency(dep_rel_df, 1, copy_to_clipboard=True))

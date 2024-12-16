@@ -4,7 +4,7 @@ import re
 from json import dump
 from pathlib import Path
 
-with Path("task/task_raw.txt").open() as f:
+with Path("task_files/task_raw.txt").open() as f:
     data = f.read()
 
 section_pattern = re.compile(
@@ -33,14 +33,14 @@ for section in sections:
         "dependencies": dep_rel,
     }
 
-with Path("task/task.json").open("w") as tf:
+with Path("task_files/task.json").open("w") as tf:
     dump(parsed_sections, tf, indent=4)
 
 with (
-    Path("task/sentences.txt").open("w") as sf,
-    Path("task/pos_tags.txt").open("w") as posf,
-    Path("task/parses.txt").open("w") as parsef,
-    Path("task/dep_rel.txt").open("w") as df,
+    Path("task_files/sentences.txt").open("w") as sf,
+    Path("task_files/pos_tags.txt").open("w") as posf,
+    Path("task_files/parses.txt").open("w") as parsef,
+    Path("task_files/dep_rel.txt").open("w") as df,
 ):
     files = [sf, posf, parsef, df]
     for section in parsed_sections.values():

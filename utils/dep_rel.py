@@ -1,4 +1,4 @@
-"""Utils specifically for dependence relations."""
+"""Utils specifically for dependency relations."""
 
 import networkx as nx
 import pandas as pd
@@ -63,7 +63,7 @@ def df_to_tikz_dependency(
         the LaTeX string to clipboard.
 
     Returns:
-        str: the LaTeX string defining the dependence graph.
+        str: the LaTeX string defining the dependency graph.
         The string is optionally copied to the clipboard.
 
     """

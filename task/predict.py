@@ -4,7 +4,6 @@ import warnings
 from enum import Enum
 from typing import cast
 
-import click
 import pandas as pd
 import stanza
 from stanza.models.common.doc import Document
@@ -79,54 +78,5 @@ class DependencyParser:
         return df_converters[self.df_format](doc)
 
 
-@click.command()
-@click.option(
-    "--df-format",
-    type=click.Choice(
-        [df_format.value for df_format in DataFrameFormat],
-        case_sensitive=False,
-    ),
-    default=DataFrameFormat.DEPREL.value,
-    help="Format of the output DataFrame as defined in `DataFrameFormat`.",
-)
-@click.option(
-    "--device",
-    type=str,
-    default="mps",
-    help="Device to run the pipeline on.",
-)
-@click.option(
-    "--download-method",
-    type=click.Choice([method.name for method in DownloadMethod], case_sensitive=False),
-    default=DownloadMethod.REUSE_RESOURCES.name,
-    help="Method to use for downloading Stanza models.",
-)
-@click.argument("text")
-def dependency_parse(
-    df_format: str,
-    device: str,
-    download_method: str,
-    text: str,
-) -> None:
-    """Command-line interface for dependency parsing.
-
-    Text is the input string to parse.
-    """
-    parser = DependencyParser(
-        df_format=DataFrameFormat(df_format),
-        device=device,
-        download_method=DownloadMethod[download_method],
-    )
-    result = parser(text)
-    click.echo(result)
-
-
-@click.group()
-def cli() -> None:
-    """Run prediction CLI for dependency parsing and."""
-
-
-cli.add_command(dependency_parse)
-
 if __name__ == "__main__":
-    cli()
+    pass

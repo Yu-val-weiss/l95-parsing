@@ -82,7 +82,7 @@ class DependencyParser:
 class ConstituencyParser:
     """Class wrapping Supar functionality for constituence parsing."""
 
-    def __init__(self, path: str = "crf-con-en", clean: bool = True) -> None:
+    def __init__(self, path: str = "crf-con-en", *, clean: bool = True) -> None:
         """Initialise the class.
 
         Args:
@@ -149,9 +149,9 @@ def clean_tree(tree: Tree) -> Tree:
 
 
 if __name__ == "__main__":
-    parser = ConstituencyParser()
+    parser = ConstituencyParser(clean=True)
     res = parser("As she walked past it, the driver's glass started to open.")
-    res[0].pprint()
+    print(res[0].pformat_latex_qtree())
     # for tree in res:
     #     tree.pretty_print()
     #     simplify_tree(tree).pretty_print()

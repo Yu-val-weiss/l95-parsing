@@ -11,6 +11,7 @@ from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
 from supar import Parser
 
+from utils.constituency import tree_to_latex
 from utils.stanza import doc_to_conllu_df, doc_to_deprel_df
 
 warnings.filterwarnings(action="ignore", category=FutureWarning)
@@ -151,7 +152,8 @@ def clean_tree(tree: Tree) -> Tree:
 if __name__ == "__main__":
     parser = ConstituencyParser(clean=True)
     res = parser("As she walked past it, the driver's glass started to open.")
-    print(res[0].pformat_latex_qtree())
+    res[0].pretty_print()
+    print(tree_to_latex(res[0], copy_to_clipboard=True))
     # for tree in res:
     #     tree.pretty_print()
     #     simplify_tree(tree).pretty_print()

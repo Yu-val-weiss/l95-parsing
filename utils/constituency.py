@@ -1,10 +1,12 @@
 """Utils specifically for dealing with constituency parses."""
 
+import re
+
 import pyperclip
 from nltk.tree import Tree
 
 
-def get_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:
+def tree_to_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:
     """Convert a tree to a `qtree` latex tree.
 
     Args:
@@ -17,6 +19,7 @@ def get_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:
 
     """
     s = tree.pformat_latex_qtree()
+    s = re.sub(r"(\]\s+)\.(\s+\])", r"\g<1>{.}\g<2>", s)
     if copy_to_clipboard:
         pyperclip.copy(s)
         print("Copied LaTeX string to clipboard!")

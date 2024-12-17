@@ -44,7 +44,7 @@ with Path("task_files/task.json").open("w") as tf:
 with (
     Path("task_files/sentences.txt").open("w") as sf,
     Path("task_files/pos_tags.txt").open("w") as posf,
-    Path("task_files/parses.txt").open("w") as parsef,
+    Path("task_files/constituencies.txt").open("w") as parsef,
     Path("task_files/dep_rel.txt").open("w") as df,
 ):
     files = [sf, posf, parsef, df]

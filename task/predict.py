@@ -11,7 +11,7 @@ from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
 from supar import Parser
 
-from utils.constituency import tree_to_latex
+from utils.constituency import clean_tree
 from utils.stanza import doc_to_conllu_df, doc_to_deprel_df
 
 warnings.filterwarnings(action="ignore", category=FutureWarning)
@@ -83,18 +83,21 @@ class DependencyParser:
 class ConstituencyParser:
     """Class wrapping Supar functionality for constituence parsing."""
 
-    def __init__(self, path: str = "crf-con-en", *, clean: bool = True) -> None:
+    def __init__(self, path: str = "con-crf-en", *, clean: bool = True) -> None:
         """Initialise the class.
 
         Args:
             path (str, optional): The path of the parser to load. Options are:
-            "crf-con-en", "crf-con-zh", "crf-con-roberta-en", "crf-con-electra-zh",
-            "crf-con-xlmr". Defaults to "crf-con-en".
+            "con-crf-en", "con-crf-zh", "con-crf-roberta-en", "con-crf-electra-zh",
+            "con-crf-xlmr". Defaults to "con-crf-en".
 
             clean(bool, optional): Flag whether to clean the tree or not.
 
         """
-        self._parser = Parser.load(path)
+        with warnings.catch_warnings(record=True):
+            warnings.filterwarnings("ignore")  # Re-enable all warnings
+            self._parser = Parser.load(path)
+        # self._parser = Parser.load(path)
         self._clean = clean
 
     def __call__(self, string: str) -> list[Tree]:
@@ -109,51 +112,17 @@ class ConstituencyParser:
         """
         res = self._parser.predict(string, lang="en", prob=False, verbose=True)
         return [
-            clean_tree(sent.values[2]) if self._clean else sent.values[2]
-            for sent in res
+            clean_tree(sent.values[2]) if self._clean else sent.values[2]  # type: ignore
+            for sent in res  # type: ignore
         ]
 
 
-def wipe_empty_tags(tree: Tree) -> Tree:
-    """Combine leaf nodes that had an empty POS with the one above.
-
-    Args:
-        tree (Tree): Tree to cleanup.
-
-    Returns:
-        Tree: Cleaned up tree.
-
-    """
-    new_tree = []
-    for subtree in tree:
-        if isinstance(subtree, Tree):
-            if subtree.label() == "_":
-                new_tree.append(subtree.leaves()[0])
-            else:
-                new_tree.append(wipe_empty_tags(subtree))
-    return Tree(tree.label(), new_tree)
-
-
-def clean_tree(tree: Tree) -> Tree:
-    """Clean tree for processing.
-
-    Args:
-        tree (Tree): Uncleaned up tree from parser.
-
-    Returns:
-        Tree: Clean tree.
-
-    """
-    if tree.label() == "TOP":
-        return wipe_empty_tags(tree[0])  # type: ignore
-    return wipe_empty_tags(tree)
-
-
 if __name__ == "__main__":
-    parser = ConstituencyParser(clean=True)
-    res = parser("As she walked past it, the driver's glass started to open.")
+    parser = ConstituencyParser(path="con-crf-roberta-en", clean=False)
+    sent = "All through August the rain hardly stopped."
+    res = parser(sent)
     res[0].pretty_print()
-    print(tree_to_latex(res[0], copy_to_clipboard=True))
+    clean_tree(res[0]).pretty_print()
     # for tree in res:
     #     tree.pretty_print()
     #     simplify_tree(tree).pretty_print()

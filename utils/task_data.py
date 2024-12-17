@@ -72,7 +72,7 @@ def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
         f.write(s)
 
 
-def load_parses(file: str = "task_files/parses.txt") -> list[Tree]:
+def load_constituency_parses(file: str = "task_files/constituencies.txt") -> list[Tree]:
     """Load parse tree file.
 
     Returns:
@@ -133,6 +133,6 @@ def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
 
 
 if __name__ == "__main__":
-    f = load_parses()
+    f = load_constituency_parses()
     for tree in f:
         tree.pretty_print()

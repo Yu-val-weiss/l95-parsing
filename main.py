@@ -44,7 +44,7 @@ def _eval_dep_rel(
     save_predictions: None | str = None,
 ) -> None:
     res = eval_dep_rel(sentences_file, gold_file, save_predictions)
-    print(res.pretty_string())
+    res.pretty_print()
 
 
 @cli.group()

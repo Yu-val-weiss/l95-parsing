@@ -20,7 +20,7 @@ logger = logging.getLogger("stanza")
 
 
 class DependencyRelationScore(NamedTuple):
-    """Tuple for Dependency Relation scores.
+    """NamedTuple for Dependency Relation scores.
 
     LAS (labelled attachment score)
 
@@ -33,13 +33,8 @@ class DependencyRelationScore(NamedTuple):
     UAS: EvalScore
     LS: EvalScore
 
-    def pretty_string(self) -> str:
-        """Create table representation of DependencyRelationScore.
-
-        Returns:
-            str: table.
-
-        """
+    def pretty_print(self) -> None:
+        """Print table representation of DependencyRelationScore."""
         table = PrettyTable()
         table.field_names = ["Metric", "Precision", "Recall", "F1"]
 
@@ -53,7 +48,7 @@ class DependencyRelationScore(NamedTuple):
                 ],
             )
 
-        return table.get_string()
+        print(table)
 
 
 def eval_dep_rel(
@@ -69,7 +64,7 @@ def eval_dep_rel(
         gold_file (None | str, optional): The gold dependency file relation to use.
         Defaults to the one in task_files.
         save_predictions (None | str, optional): Where to save predictions.
-        Will not save if set None.
+        Will not save if set to None.
 
     """
     sentences = (
@@ -90,12 +85,12 @@ def eval_dep_rel(
 
     logger.info("Evaluating...")
 
-    pred_labelled_heads = df_to_labelled_heads(result)
-    pred_unlabelled_heads = df_to_unlabelled_heads(result)
+    pred_labelled_heads = df_to_heads(result, labelled=True)
+    pred_unlabelled_heads = df_to_heads(result, labelled=False)
     pred_labels = df_to_labels(result)
 
-    gold_labelled_heads = df_to_labelled_heads(gold)
-    gold_unlabelled_heads = df_to_unlabelled_heads(gold)
+    gold_labelled_heads = df_to_heads(gold, labelled=True)
+    gold_unlabelled_heads = df_to_heads(gold, labelled=False)
     gold_labels = df_to_labels(gold)
 
     res = DependencyRelationScore(
@@ -109,30 +104,29 @@ def eval_dep_rel(
     return res
 
 
-def df_to_labelled_heads(df: pd.DataFrame) -> set[tuple[int, int, str, int]]:
-    """Generate a set containing each dependency relation, labelled.
+def df_to_heads(
+    df: pd.DataFrame,
+    *,
+    labelled: bool = True,
+) -> set[tuple]:
+    """Generate a set containing each dependency relation.
 
     Args:
         df (pd.DataFrame): A `DEPREL_COLS` format pandas DataFrame
+        labelled (bool): Decides whether to return labelled or unlabelled tuples.
 
     Returns:
-        set[tuple[int, int, str, int]]: A set of (sent_id, word_id, deprel, head) tuples
+        set[tuple]: A set of (sent_id, word_id, deprel, head) tuples if labelled.
+        And a set of (sent_id, word_id, head) if unlabelled.
+
 
     """
-    return {(*row.Index, row.deprel.lower(), row.head) for row in df.itertuples()}  # type: ignore
-
-
-def df_to_unlabelled_heads(df: pd.DataFrame) -> set[tuple[int, int, int]]:
-    """Generate a set containing each dependency relation, unlabelled.
-
-    Args:
-        df (pd.DataFrame): A `DEPREL_COLS` format pandas DataFrame
-
-    Returns:
-        set[tuple[int, int, int]]: A set of (sent_id, word_id, head) tuples
-
-    """
-    return {(*row.Index, row.head) for row in df.itertuples()}  # type: ignore
+    return {
+        (*row.Index, row.deprel.lower(), row.head)  # type: ignore
+        if labelled
+        else (*row.Index, row.head)  # type: ignore
+        for row in df.itertuples()
+    }
 
 
 def df_to_labels(df: pd.DataFrame) -> set[tuple[int, int, str]]:
@@ -149,4 +143,5 @@ def df_to_labels(df: pd.DataFrame) -> set[tuple[int, int, str]]:
 
 
 if __name__ == "__main__":
-    eval_dep_rel()
+    r = eval_dep_rel()
+    r.pretty_print()

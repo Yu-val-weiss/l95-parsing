@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 import logging
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
-from nltk.tree import Tree
 from prettytable import PrettyTable
 
 from task.predict import ConstituencyParser
-from utils.constituency import clean_tree, tree_to_latex
 from utils.task_data import (
     dump_constituency_parses,
     load_constituency_parses,
@@ -17,6 +15,9 @@ from utils.task_data import (
 )
 
 from .score import EvalScore
+
+if TYPE_CHECKING:
+    from nltk.tree import Tree
 
 logger = logging.getLogger()
 

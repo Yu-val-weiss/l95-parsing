@@ -6,10 +6,14 @@ from typing import cast
 
 import pandas as pd
 import stanza
+from nltk.tree import Tree
 from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
+from supar import Parser
 
 from utils.stanza import doc_to_conllu_df, doc_to_deprel_df
+
+warnings.filterwarnings(action="ignore", category=FutureWarning)
 
 
 class DataFrameFormat(Enum):
@@ -27,14 +31,12 @@ class DependencyParser:
         device: str,
         download_method: DownloadMethod,
     ) -> stanza.Pipeline:
-        with warnings.catch_warnings():
-            warnings.simplefilter(action="ignore", category=FutureWarning)
-            return stanza.Pipeline(
-                lang="en",
-                processors="tokenize,mwt,pos,lemma,depparse",
-                device=device,
-                download_method=download_method,
-            )
+        return stanza.Pipeline(
+            lang="en",
+            processors="tokenize,mwt,pos,lemma,depparse",
+            device=device,
+            download_method=download_method,
+        )
 
     def __init__(
         self,
@@ -60,7 +62,6 @@ class DependencyParser:
         """Predict a dependency parse for the string.
 
         Args:
-            pipeline (stanza.Pipeline): A stanza pipeline.
             string (str): String containing sentence/s to parse.
 
         Returns:
@@ -78,5 +79,79 @@ class DependencyParser:
         return df_converters[self.df_format](doc)
 
 
+class ConstituencyParser:
+    """Class wrapping Supar functionality for constituence parsing."""
+
+    def __init__(self, path: str = "crf-con-en", clean: bool = True) -> None:
+        """Initialise the class.
+
+        Args:
+            path (str, optional): The path of the parser to load. Options are:
+            "crf-con-en", "crf-con-zh", "crf-con-roberta-en", "crf-con-electra-zh",
+            "crf-con-xlmr". Defaults to "crf-con-en".
+
+            clean(bool, optional): Flag whether to clean the tree or not.
+
+        """
+        self._parser = Parser.load(path)
+        self._clean = clean
+
+    def __call__(self, string: str) -> list[Tree]:
+        """Predict a constituency parse for the string.
+
+        Args:
+            string (str): String containing sentence/s to parse.
+
+        Returns:
+            pd.DataFrame: pandas DataFrame in the format according to `self.df_format`.
+
+        """
+        res = self._parser.predict(string, lang="en", prob=False, verbose=True)
+        return [
+            clean_tree(sent.values[2]) if self._clean else sent.values[2]
+            for sent in res
+        ]
+
+
+def wipe_empty_tags(tree: Tree) -> Tree:
+    """Combine leaf nodes that had an empty POS with the one above.
+
+    Args:
+        tree (Tree): Tree to cleanup.
+
+    Returns:
+        Tree: Cleaned up tree.
+
+    """
+    new_tree = []
+    for subtree in tree:
+        if isinstance(subtree, Tree):
+            if subtree.label() == "_":
+                new_tree.append(subtree.leaves()[0])
+            else:
+                new_tree.append(wipe_empty_tags(subtree))
+    return Tree(tree.label(), new_tree)
+
+
+def clean_tree(tree: Tree) -> Tree:
+    """Clean tree for processing.
+
+    Args:
+        tree (Tree): Uncleaned up tree from parser.
+
+    Returns:
+        Tree: Clean tree.
+
+    """
+    if tree.label() == "TOP":
+        return wipe_empty_tags(tree[0])  # type: ignore
+    return wipe_empty_tags(tree)
+
+
 if __name__ == "__main__":
-    pass
+    parser = ConstituencyParser()
+    res = parser("As she walked past it, the driver's glass started to open.")
+    res[0].pprint()
+    # for tree in res:
+    #     tree.pretty_print()
+    #     simplify_tree(tree).pretty_print()

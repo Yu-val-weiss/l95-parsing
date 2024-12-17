@@ -10,50 +10,13 @@ from prettytable import PrettyTable
 from task.predict import DataFrameFormat, DependencyParser
 from utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
 
+from .score import EvalScore
+
 if TYPE_CHECKING:
     import pandas as pd
 
 
 logger = logging.getLogger("stanza")
-
-
-class EvalScore(NamedTuple):
-    """Tuple for evaluation scores."""
-
-    precision: float
-    recall: float
-    f1: float
-
-    def __str__(self) -> str:
-        """Create string representation.
-
-        Returns:
-            str: string depiction
-
-        """
-        return f"(P = {self.precision:.2f}, R = {self.recall:.2f}, F = {self.f1:.2f})"
-
-    @classmethod
-    def from_sets(cls, pred_set: set, gold_set: set) -> EvalScore:
-        """Create an evaluation score from predicted and gold sets.
-
-        Args:
-            pred_set (set): Set containing predictions.
-            gold_set (set): Set containing ground truth values.
-
-        Returns:
-            EvalScore: Returns corresponding EvalScore.
-
-        """
-        correct = len(pred_set & gold_set)
-        pred = len(pred_set)
-        gold = len(pred_set)
-
-        p = correct / pred
-        r = correct / gold
-        f = (2 * p * r) / (p + r)
-
-        return cls(p, r, f)
 
 
 class DependencyRelationScore(NamedTuple):

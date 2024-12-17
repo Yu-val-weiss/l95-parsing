@@ -16,7 +16,7 @@ stanza = "^1.9.2"
 prettytable = "^3.12.0"
 depedit = "^3.4.0.1"
 click = "^8.1.7"
-supar = "^1.1.4"
+supar = {git = "https://github.com/Yu-val-weiss/supar-parser.git" }
 nltk = "^3.9.1"
 
 [build-system]
@@ -25,4 +25,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["T201", "ERA001", "PGH003", "ANN202", "D301", "PD011"]
+ignore = ["T201", "ERA001", "PGH003", "ANN202", "D301", "PD011", "PLR2004"]

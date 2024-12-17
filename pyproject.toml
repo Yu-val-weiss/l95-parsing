@@ -17,6 +17,7 @@ prettytable = "^3.12.0"
 depedit = "^3.4.0.1"
 click = "^8.1.7"
 supar = "^1.1.4"
+nltk = "^3.9.1"
 
 [build-system]
 requires = ["poetry-core"]

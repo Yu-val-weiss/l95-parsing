@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pandas as pd
+from nltk.tree import Tree
 
 from utils import DEP_REL_COLS, INDEX_COLS, POS_TAG_COLS
 
@@ -71,14 +72,14 @@ def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
         f.write(s)
 
 
-def load_parses(file: str = "task_files/parses.txt") -> list[str]:
+def load_parses(file: str = "task_files/parses.txt") -> list[Tree]:
     """Load parse tree file.
 
     Returns:
         list[str]: List of parse trees
 
     """
-    return _read_f(file).split("\n\n")
+    return [Tree.fromstring(tree) for tree in _read_f(file).split("\n\n")]
 
 
 def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
@@ -132,5 +133,6 @@ def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
 
 
 if __name__ == "__main__":
-    d = load_dep_rel()
-    dump_dep_rel(d, "task_files/dep_rel.txt")
+    f = load_parses()
+    for tree in f:
+        tree.pretty_print()

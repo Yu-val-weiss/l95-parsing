@@ -14,6 +14,14 @@ def _read_f(fp: str) -> str:
         return f.read().strip()
 
 
+def _dump(file: str, s: str):
+    file_path = Path(file)
+    file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
+
+    with file_path.open("w") as f:
+        f.write(s)
+
+
 def load_task(file: str = "task_files/task.json") -> dict[int, dict]:
     """Load task JSON.
 
@@ -24,6 +32,28 @@ def load_task(file: str = "task_files/task.json") -> dict[int, dict]:
     with Path(file).open() as f:
         j = json.load(f)
     return {int(k): v for k, v in j.items()}
+
+
+def load_constituency_parses(file: str = "task_files/constituencies.txt") -> list[Tree]:
+    """Load parse tree file.
+
+    Returns:
+        list[str]: List of parse trees
+
+    """
+    return [Tree.fromstring(tree) for tree in _read_f(file).split("\n\n")]
+
+
+def dump_constituency_parses(parses: list[Tree], file: str) -> None:
+    """Dump constituency parses to file.
+
+    Args:
+        parses (list[Tree]): Constituency parses to dump.
+        file (str): Where to dump.
+
+    """
+    s = "\n\n".join(x.pformat() for x in parses)
+    _dump(file, s)
 
 
 def load_dep_rel(file: str = "task_files/dep_rel_fixed.txt") -> pd.DataFrame:
@@ -65,21 +95,7 @@ def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
     ]
     s = "\n".join(x).strip() + "\n\n"
 
-    file_path = Path(file)
-    file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
-
-    with file_path.open("w") as f:
-        f.write(s)
-
-
-def load_constituency_parses(file: str = "task_files/constituencies.txt") -> list[Tree]:
-    """Load parse tree file.
-
-    Returns:
-        list[str]: List of parse trees
-
-    """
-    return [Tree.fromstring(tree) for tree in _read_f(file).split("\n\n")]
+    _dump(file, s)
 
 
 def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
@@ -115,11 +131,7 @@ def dump_pos_tags(pos_tag_df: pd.DataFrame, file: str) -> None:
     ]
     s = "\n\n".join(x).strip() + "\n\n"
 
-    file_path = Path(file)
-    file_path.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
-
-    with file_path.open("w") as f:
-        f.write(s)
+    _dump(file, s)
 
 
 def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
@@ -134,5 +146,4 @@ def load_sentences(file: str = "task_files/sentences.txt") -> list[str]:
 
 if __name__ == "__main__":
     f = load_constituency_parses()
-    for tree in f:
-        tree.pretty_print()
+    dump_constituency_parses(f, "task_files/pretty_constituencies.txt")

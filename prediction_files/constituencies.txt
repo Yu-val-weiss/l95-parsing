@@ -1,0 +1,81 @@
+(S
+  (SBAR As (S (NP she) (VP walked (PP past (NP it)))))
+  ,
+  (NP the driver's glass)
+  (VP started (S (VP to (VP open))))
+  .)
+
+(S
+  (PP With (NP a handkerchief))
+  (NP she)
+  (VP wiped (NP the sweat) (PP from (NP her forehead)))
+  .)
+
+(S
+  (S
+    (ADVP Prudently)
+    ,
+    (NP they)
+    (VP had (VP diversified (PP into (NP banking and insurance)))))
+  ,
+  and
+  (S
+    (PP as (NP a result))
+    (NP their influence)
+    (VP was (VP felt (PP at (NP the highest level)))))
+  .)
+
+(S
+  (NP The arranged marriage)
+  (VP
+    would
+    (VP
+      be
+      (NP (NP the social event) (PP of (NP the following year)))))
+  .)
+
+(S
+  (SBAR (WHADVP When) (S (ADVP at last) (NP she) (VP spoke)))
+  ,
+  (NP her words)
+  (VP were (ADJP heavy and disjointed))
+  .)
+
+(S
+  (NP (NP The road) (PP to (NP the coast)))
+  (VP
+    was
+    (ADJP busy (PP with (NP traffic)))
+    (PP in (NP both directions)))
+  .)
+
+(S (NP The expected date) (VP came and went) .)
+
+(S
+  (NP She)
+  (VP
+    sighed
+    (PP
+      at
+      (NP
+        (NP (NP the irony) (PP of (NP (NP it) (NP all))))
+        ,
+        (NP (NP the waste) (PP of (NP it (NP all)))))))
+  .)
+
+(S
+  (PP All through (NP August))
+  (NP the rain)
+  (ADVP hardly)
+  (VP stopped)
+  .)
+
+(S
+  (VP
+    Thank
+    (NP the gods)
+    (SBAR
+      (S
+        (NP he)
+        (VP didn't (VP have (S (VP to (VP know (PP of (NP this))))))))))
+  .)

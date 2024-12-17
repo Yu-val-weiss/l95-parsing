@@ -39,6 +39,6 @@ class EvalScore(NamedTuple):
 
         p = correct / pred
         r = correct / gold
-        f = (2 * p * r) / (p + r)
+        f = (2 * p * r) / (p + r) if p + r > 0.0 else 0.0
 
         return cls(p, r, f)

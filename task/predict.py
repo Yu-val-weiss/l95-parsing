@@ -1,18 +1,22 @@
 """Contains Python functions relating to prediction."""
 
+from __future__ import annotations
+
 import warnings
 from enum import Enum
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
-import pandas as pd
 import stanza
-from nltk.tree import Tree
 from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
 from supar import Parser
 
 from utils.constituency import clean_tree
 from utils.stanza import doc_to_conllu_df, doc_to_deprel_df
+
+if TYPE_CHECKING:
+    import pandas as pd
+    from nltk.tree import Tree
 
 warnings.filterwarnings(action="ignore", category=FutureWarning)
 
@@ -100,11 +104,12 @@ class ConstituencyParser:
         # self._parser = Parser.load(path)
         self._clean = clean
 
-    def __call__(self, string: str) -> list[Tree]:
+    def __call__(self, string: str | list[str]) -> list[Tree]:
         """Predict a constituency parse for the string.
 
         Args:
-            string (str): String containing sentence/s to parse.
+            string (str | list): String containing sentence to parse.
+            Or list containing one string per sentence.
 
         Returns:
             pd.DataFrame: pandas DataFrame in the format according to `self.df_format`.

@@ -5,7 +5,7 @@ from __future__ import annotations
 import click
 from stanza.pipeline.core import DownloadMethod
 
-from task.eval import eval_dep_rel
+from task.eval import eval_const, eval_dep_rel
 from task.predict import DataFrameFormat, DependencyParser
 
 
@@ -44,6 +44,34 @@ def _eval_dep_rel(
     save_predictions: None | str = None,
 ) -> None:
     res = eval_dep_rel(sentences_file, gold_file, save_predictions)
+    res.pretty_print()
+
+
+@evaluate.command(name="constituencies")
+@click.option(
+    "--sentences-file",
+    default=None,
+    type=click.Path(exists=True),
+    help="Path to the sentences file for evaluation.",
+)
+@click.option(
+    "--gold-file",
+    default=None,
+    type=click.Path(exists=True),
+    help="Path to the gold constituency relations file.",
+)
+@click.option(
+    "--save-predictions",
+    default=None,
+    type=click.Path(),
+    help="Path to save the prediction results.",
+)
+def _eval_constituencies(
+    sentences_file: None | str = None,
+    gold_file: None | str = None,
+    save_predictions: None | str = None,
+) -> None:
+    res = eval_const(sentences_file, gold_file, save_predictions)
     res.pretty_print()
 
 

@@ -62,7 +62,7 @@ class ConstituencyScore(NamedTuple):
         print(cross_table)
 
 
-def eval_dep_rel(
+def eval_const(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
@@ -217,5 +217,5 @@ def cross_count(gold_spans: set[tuple], pred_spans: set[tuple]) -> int:
 
 
 if __name__ == "__main__":
-    res = eval_dep_rel(save_predictions="prediction_files/constituencies.txt")
+    res = eval_const(save_predictions="prediction_files/constituencies.txt")
     res.pretty_print()

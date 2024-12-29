@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger("stanza")
+logger.propagate = False
 
 
 class DependencyRelationScore(NamedTuple):

@@ -3,10 +3,47 @@
 from __future__ import annotations
 
 import click
+import pyperclip
 from stanza.pipeline.core import DownloadMethod
 
 from task.eval import eval_const, eval_dep_rel
 from task.predict import DataFrameFormat, DependencyParser
+from utils.constituency import tree_to_latex
+from utils.dep_rel import df_to_tikz_dependency
+from utils.task_data import load_constituency_parses, load_dep_rel
+
+
+class RangeType(click.ParamType):
+    """Custom range type for visualisation CLI."""
+
+    def convert(
+        self,
+        value: str,
+        param: click.Parameter | None,
+        ctx: click.Context | None,
+    ) -> tuple[int, ...]:
+        """Convert RangeType to int tuple."""
+        parts = value.replace(" ", "").split(",")
+        rng = set()
+        for p in parts:
+            if p == "":
+                continue
+            if "-" in p:
+                lo, hi = p.split("-")
+                try:
+                    lo = int(lo)
+                    hi = int(hi)
+                    rng.update(set(range(lo, hi + 1)))
+                except ValueError:
+                    self.fail(f"{lo!r} or {hi!r} is not a valid integer", param, ctx)
+            else:
+                try:
+                    num = int(p)
+                    rng.add(num)
+                except ValueError:
+                    self.fail(f"{p!r} is not a valid integer", param, ctx)
+
+        return tuple(sorted(rng))
 
 
 @click.group()
@@ -38,11 +75,12 @@ def evaluate() -> None:
     type=click.Path(),
     help="Path to save the prediction results.",
 )
-def _eval_dep_rel(
+def cli_eval_dep_rel(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
 ) -> None:
+    """CLI for dependency relation evaluation."""
     res = eval_dep_rel(sentences_file, gold_file, save_predictions)
     res.pretty_print()
 
@@ -66,11 +104,12 @@ def _eval_dep_rel(
     type=click.Path(),
     help="Path to save the prediction results.",
 )
-def _eval_constituencies(
+def cli_eval_constituencies(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
 ) -> None:
+    """CLI for constituency parsing evaluation."""
     res = eval_const(sentences_file, gold_file, save_predictions)
     res.pretty_print()
 
@@ -120,6 +159,63 @@ def dependency_parse(
     )
     result = parser(text)
     click.echo(result)
+
+
+@cli.group()
+def visualise() -> None:
+    """Visualise."""
+
+
+@visualise.command()
+@click.argument(
+    "file",
+    type=click.Path(exists=True),
+)
+@click.option(
+    "--indices",
+    default="1-10",
+    type=RangeType(),
+    help="Indices of sentences to visualise.",
+)
+def constituency(file: str, indices: tuple[int]) -> None:
+    """CLI for constituency visualisation."""
+    parses = load_constituency_parses(file)
+    latexs = []
+    for i in indices:
+        click.echo(f"Sentence {i}")
+        parses[i - 1].pretty_print()
+        click.echo(ltx := tree_to_latex(parses[i]))
+        latexs.append(f"% Sentence {i}\n{ltx}")
+        click.echo("=" * 50)
+
+    pyperclip.copy("\n\n".join(latexs))
+    click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
+
+
+@visualise.command("dep_rel")
+@click.argument(
+    "file",
+    type=click.Path(exists=True),
+)
+@click.option(
+    "--indices",
+    default="1-10",
+    type=RangeType(),
+    help="Indices of sentences to visualise.",
+)
+def dep_rel(file: str, indices: tuple[int]) -> None:
+    """CLI for constituency visualisation."""
+    parses = load_dep_rel(file)
+    latexs = []
+    for i in indices:
+        click.echo(f"Sentence {i}")
+        click.echo(f"{parses.loc[i]}\n")
+        click.echo(ltx := df_to_tikz_dependency(parses, i))
+        latexs.append(f"% Sentence {i}\n{ltx}")
+        click.echo("=" * 50)
+
+    pyperclip.copy("\n\n".join(latexs))
+    click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
 
 
 if __name__ == "__main__":

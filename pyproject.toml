@@ -21,7 +21,7 @@ supar = {git = "https://github.com/Yu-val-weiss/supar-parser.git" }
 nltk = "^3.9.1"
 
 [tool.poetry.scripts]
-main = "src.main:cli"
+cli = "src.main:cli"
 
 [build-system]
 requires = ["poetry-core"]

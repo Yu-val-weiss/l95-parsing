@@ -39,12 +39,12 @@ The project provides two main parsing capabilities:
 Use the CLI interface:
 
 ```bash
-poetry run main [OPTIONS] COMMAND [ARGS]
+poetry run cli [OPTIONS] COMMAND [ARGS]
 ```
 
 All necessary models will be automatically downloaded.
 
-To get information about the CLI run
+To get information about the CLI run the following:
 
 ```bash
 poetry run main --help

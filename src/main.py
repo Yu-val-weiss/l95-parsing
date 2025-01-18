@@ -75,17 +75,24 @@ def evaluate() -> None:
     type=click.Path(),
     help="Path to save the prediction results.",
 )
+@click.option(
+    "--filter-label",
+    default=None,
+    type=str,
+    help="Evaluate for a specific label",
+)
 def cli_eval_dep_rel(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
+    filter_label: None | str = None,
 ) -> None:
     """Run dependency relation evaluation."""
-    res = eval_dep_rel(sentences_file, gold_file, save_predictions)
+    res = eval_dep_rel(sentences_file, gold_file, save_predictions, filter_label)
     res.pretty_print()
 
 
-@evaluate.command(name="constituencies")
+@evaluate.command(name="constituency")
 @click.option(
     "--sentences-file",
     default=None,
@@ -104,13 +111,20 @@ def cli_eval_dep_rel(
     type=click.Path(),
     help="Path to save the prediction results.",
 )
+@click.option(
+    "--filter-label",
+    default=None,
+    type=str,
+    help="Evaluate for a specific label",
+)
 def cli_eval_constituencies(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
+    filter_label: None | str = None,
 ) -> None:
     """Run constituency parsing evaluation."""
-    res = eval_const(sentences_file, gold_file, save_predictions)
+    res = eval_const(sentences_file, gold_file, save_predictions, filter_label)
     res.pretty_print()
 
 

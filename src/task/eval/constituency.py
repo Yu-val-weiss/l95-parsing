@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, Literal, NamedTuple, overload
 
 from prettytable import PrettyTable
 
@@ -37,8 +37,9 @@ class ConstituencyScore(NamedTuple):
     cross_brackets: int
 
     def pretty_print(self) -> None:
-        """Print table representation of DependencyRelationScore."""
+        """Print table representation of ConstituencyScore."""
         table = PrettyTable()
+        table.title = "Constituency parse score"
         table.field_names = ["Metric", "Precision", "Recall", "F1"]
 
         cross_table = PrettyTable()
@@ -62,12 +63,43 @@ class ConstituencyScore(NamedTuple):
         print(cross_table)
 
 
+class SpecificConstituencyScore(NamedTuple):
+    """NamedTuple for Dependency Relation scores.
+
+    Use Parseval metrics.
+
+    Label (filtered label)
+    Labelled (Labelled Parseval score)
+    """
+
+    label: str
+    labelled: EvalScore
+
+    def pretty_print(self) -> None:
+        """Print table representation of ConstituencyScore."""
+        table = PrettyTable()
+        table.title = f"{self.label} - specific evaluation"
+        table.field_names = ["Metric", "Precision", "Recall", "F1"]
+
+        table.add_row(
+            [
+                "Labelled",
+                f"{self.labelled.precision:.2f}",
+                f"{self.labelled.recall:.2f}",
+                f"{self.labelled.f1:.2f}",
+            ],
+        )
+
+        print(table)
+
+
 def eval_const(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
+    filter_label: None | str = None,
     parser_name: str = "con-crf-roberta-en",
-) -> ConstituencyScore:
+) -> ConstituencyScore | SpecificConstituencyScore:
     """Evaluate the Stanza's constituency parsing.
 
     Args:
@@ -80,6 +112,7 @@ def eval_const(
         parser_name (str, optional): The parser to load. Options are: "con-crf-en",
         "con-crf-zh", "con-crf-roberta-en", "con-crf-electra-zh", "con-crf-xlmr".
         Defaults to "con-crf-en".
+        filter_label (None | str, optional): Label to filter on.
 
     """
     sentences = (
@@ -104,18 +137,35 @@ def eval_const(
     logger.info("Evaluating...")
 
     pred_labelled, pred_constituents = extract_all_constituents(result, labelled=True)
-    pred_unlabelled, _ = extract_all_constituents(result, labelled=False)
-
     gold_labelled, gold_constituents = extract_all_constituents(gold, labelled=True)
-    gold_unlabelled, _ = extract_all_constituents(gold, labelled=False)
 
-    cc = sum(cross_count(g, p) for g, p in zip(gold_constituents, pred_constituents))
+    if not filter_label:
+        pred_unlabelled, _ = extract_all_constituents(result, labelled=False)
+        gold_unlabelled, _ = extract_all_constituents(gold, labelled=False)
 
-    res = ConstituencyScore(
-        EvalScore.from_sets(pred_labelled, gold_labelled),
-        EvalScore.from_sets(pred_unlabelled, gold_unlabelled),
-        cc,
-    )
+        cc = sum(
+            cross_count(g, p) for g, p in zip(gold_constituents, pred_constituents)
+        )
+
+        res = ConstituencyScore(
+            EvalScore.from_sets(pred_labelled, gold_labelled),
+            EvalScore.from_sets(pred_unlabelled, gold_unlabelled),
+            cc,
+        )
+
+    else:
+        filter_label = filter_label.upper()
+        pred_labelled = {x for x in pred_labelled if x[-1].upper() == filter_label}
+        gold_labelled = {x for x in gold_labelled if x[-1].upper() == filter_label}
+
+        if len(pred_labelled) == 0 and len(gold_labelled) == 0:
+            msg = "Label not found in either predicted or gold set."
+            raise ValueError(msg)
+
+        res = SpecificConstituencyScore(
+            filter_label,
+            EvalScore.from_sets(pred_labelled, gold_labelled),
+        )
 
     logger.info("...evaluation complete!")
 
@@ -127,7 +177,7 @@ def extract_constituents(
     start_index: int = 0,
     *,
     labelled: bool = True,
-) -> set[tuple]:
+) -> set[tuple[int, int, str]] | set[tuple[int, int]]:
     """Recursively extract constituent spans from an NLTK Tree.
 
     Args:
@@ -162,11 +212,34 @@ def extract_constituents(
     return constituents
 
 
+type LabelledConstituent = tuple[int, int, int, str]
+type UnlabelledConstituent = tuple[int, int, int]
+
+
+@overload
+def extract_all_constituents(
+    trees: list[Tree],
+    *,
+    labelled: Literal[True],
+) -> tuple[set[LabelledConstituent], list[set[LabelledConstituent]]]: ...
+
+
+@overload
+def extract_all_constituents(
+    trees: list[Tree],
+    *,
+    labelled: Literal[False],
+) -> tuple[set[UnlabelledConstituent], list[set[UnlabelledConstituent]]]: ...
+
+
 def extract_all_constituents(
     trees: list[Tree],
     *,
     labelled: bool = True,
-) -> tuple[set[tuple], list[set[tuple]]]:
+) -> tuple[
+    set[LabelledConstituent] | set[UnlabelledConstituent],
+    list[set[LabelledConstituent]] | list[set[UnlabelledConstituent]],
+]:
     """Extract contituencies from each tree in trees.
 
     Args:

@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, Literal, NamedTuple, overload
 
 from prettytable import PrettyTable
 
 from src.task.predict import DataFrameFormat, DependencyParser
 from src.utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
 
-from .score import Accuracy
+from .score import Accuracy, EvalScore
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -37,6 +37,7 @@ class DependencyRelationScore(NamedTuple):
     def pretty_print(self) -> None:
         """Print table representation of DependencyRelationScore."""
         table = PrettyTable()
+        table.title = "Dependency parse score"
         table.field_names = ["Metric", "Accuracy"]
 
         for metric_name, score in self._asdict().items():
@@ -50,11 +51,45 @@ class DependencyRelationScore(NamedTuple):
         print(table)
 
 
+class SpecificDepRelScore(NamedTuple):
+    """NamedTuple for Dependency Relation scores.
+
+    label (the specific label being analysed)
+    LAS (labelled attachment score)
+    LS (label accuracy score)
+    """
+
+    label: str
+    LAS: EvalScore
+    LS: EvalScore
+
+    def pretty_print(self) -> None:
+        """Print table representation of SpecifcDepRel."""
+        table = PrettyTable()
+        table.title = f"{self.label} - specific evaluation"
+        table.field_names = ["Metric", "Precision", "Recall", "F1"]
+
+        for metric_name, score in self._asdict().items():
+            if metric_name == "label":
+                continue
+            table.add_row(
+                [
+                    metric_name,
+                    f"{score.precision:.2f}",
+                    f"{score.recall:.2f}",
+                    f"{score.f1:.2f}",
+                ],
+            )
+
+        print(table)
+
+
 def eval_dep_rel(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
-) -> DependencyRelationScore:
+    filter_label: None | str = None,
+) -> DependencyRelationScore | SpecificDepRelScore:
     """Evaluate the Stanza's dependency relation parsing.
 
     Args:
@@ -64,6 +99,7 @@ def eval_dep_rel(
         Defaults to the one in task_files.
         save_predictions (None | str, optional): Where to save predictions.
         Will not save if set to None.
+        filter_label (None | str, optional): Label to filter on.
 
     """
     sentences = (
@@ -92,22 +128,61 @@ def eval_dep_rel(
     gold_unlabelled_heads = df_to_heads(gold, labelled=False)
     gold_labels = df_to_labels(gold)
 
-    res = DependencyRelationScore(
-        Accuracy.from_sets(pred_labelled_heads, gold_labelled_heads),
-        Accuracy.from_sets(pred_unlabelled_heads, gold_unlabelled_heads),
-        Accuracy.from_sets(pred_labels, gold_labels),
-    )
+    if not filter_label:
+        res = DependencyRelationScore(
+            Accuracy.from_sets(pred_labelled_heads, gold_labelled_heads),
+            Accuracy.from_sets(pred_unlabelled_heads, gold_unlabelled_heads),
+            Accuracy.from_sets(pred_labels, gold_labels),
+        )
+
+    else:
+        filter_label = filter_label.lower()
+
+        pred_labelled_heads = {
+            x for x in pred_labelled_heads if x[2].lower() == filter_label
+        }
+        pred_labels = {x for x in pred_labels if x[2].lower() == filter_label}
+        gold_labelled_heads = {
+            x for x in gold_labelled_heads if x[2].lower() == filter_label
+        }
+        gold_labels = {x for x in gold_labels if x[2].lower() == filter_label}
+
+        if len(pred_labelled_heads) == 0 and len(gold_labelled_heads) == 0:
+            msg = "Label not found in either predicted or gold set."
+            raise ValueError(msg)
+
+        res = SpecificDepRelScore(
+            filter_label,
+            EvalScore.from_sets(pred_labelled_heads, gold_labelled_heads),
+            EvalScore.from_sets(pred_labels, gold_labels),
+        )
 
     logger.info("...evaluation complete!")
 
     return res
 
 
+type LabelledDeps = tuple[int, int, str, int]
+type UnlabelledDeps = tuple[int, int, int]
+
+
+@overload
+def df_to_heads(df: pd.DataFrame, *, labelled: Literal[True]) -> set[LabelledDeps]: ...
+
+
+@overload
+def df_to_heads(
+    df: pd.DataFrame,
+    *,
+    labelled: Literal[False],
+) -> set[UnlabelledDeps]: ...
+
+
 def df_to_heads(
     df: pd.DataFrame,
     *,
     labelled: bool = True,
-) -> set[tuple]:
+) -> set[LabelledDeps] | set[UnlabelledDeps]:
     """Generate a set containing each dependency relation.
 
     Args:

@@ -2359,7 +2359,7 @@ visualization = ["ipython", "spacy", "streamlit"]
 
 [[package]]
 name = "supar"
-version = "1.1.4"
+version = "1.1.5"
 description = "State-of-the-art parsers for natural language"
 optional = false
 python-versions = ">=3.7"

@@ -35,7 +35,7 @@ class EvalScore(NamedTuple):
         """
         correct = len(pred_set & gold_set)
         pred = len(pred_set)
-        gold = len(pred_set)
+        gold = len(gold_set)
 
         p = correct / pred
         r = correct / gold

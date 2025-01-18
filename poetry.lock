@@ -2385,7 +2385,7 @@ elmo = ["allennlp"]
 type = "git"
 url = "https://github.com/Yu-val-weiss/supar-parser.git"
 reference = "HEAD"
-resolved_reference = "339098e1e89b322f3781fc782da86ab7b9954a6b"
+resolved_reference = "1f85377db1f4efacdbe1acecc29681d272fb6017"
 
 [[package]]
 name = "sympy"

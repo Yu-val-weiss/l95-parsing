@@ -6,8 +6,8 @@ from pathlib import Path
 
 from depedit import DepEdit
 
-from utils.conllu import convert_to_dep_rel, generate_conll, load_conll
-from utils.task_data import dump_dep_rel
+from src.utils.conllu import convert_to_dep_rel, generate_conll, load_conll
+from src.utils.task_data import dump_dep_rel
 
 with Path("task_files/task_raw.txt").open() as f:
     data = f.read()

@@ -6,11 +6,11 @@ import click
 import pyperclip
 from stanza.pipeline.core import DownloadMethod
 
-from task.eval import eval_const, eval_dep_rel
-from task.predict import DataFrameFormat, DependencyParser
-from utils.constituency import tree_to_latex
-from utils.dep_rel import df_to_tikz_dependency
-from utils.task_data import load_constituency_parses, load_dep_rel
+from src.task.eval import eval_const, eval_dep_rel
+from src.task.predict import DataFrameFormat, DependencyParser
+from src.utils.constituency import tree_to_latex
+from src.utils.dep_rel import df_to_tikz_dependency
+from src.utils.task_data import load_constituency_parses, load_dep_rel
 
 
 class RangeType(click.ParamType):

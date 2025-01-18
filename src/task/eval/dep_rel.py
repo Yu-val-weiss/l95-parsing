@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from prettytable import PrettyTable
 
-from task.predict import DataFrameFormat, DependencyParser
-from utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
+from src.task.predict import DataFrameFormat, DependencyParser
+from src.utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
 
 from .score import EvalScore
 

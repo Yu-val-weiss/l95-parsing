@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from nltk.tree import Tree
 
-from utils import DEP_REL_COLS, INDEX_COLS, POS_TAG_COLS
+from src.utils import DEP_REL_COLS, INDEX_COLS, POS_TAG_COLS
 
 
 def _read_f(fp: str) -> str:

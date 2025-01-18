@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from prettytable import PrettyTable
 
-from task.predict import ConstituencyParser
-from utils.task_data import (
+from src.task.predict import ConstituencyParser
+from src.utils.task_data import (
     dump_constituency_parses,
     load_constituency_parses,
     load_sentences,

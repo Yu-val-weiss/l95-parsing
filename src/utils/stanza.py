@@ -5,7 +5,7 @@ from typing import cast
 import pandas as pd
 from stanza.models.common.doc import Document, Sentence, Word
 
-from utils import CONLLU_COLS, DEP_REL_COLS, INDEX_COLS
+from src.utils import CONLLU_COLS, DEP_REL_COLS, INDEX_COLS
 
 
 def doc_to_conllu_df(doc: Document) -> pd.DataFrame:

@@ -11,8 +11,8 @@ from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
 from supar import Parser
 
-from utils.constituency import clean_tree
-from utils.stanza import doc_to_conllu_df, doc_to_deprel_df
+from src.utils.constituency import clean_tree
+from src.utils.stanza import doc_to_conllu_df, doc_to_deprel_df
 
 if TYPE_CHECKING:
     import pandas as pd

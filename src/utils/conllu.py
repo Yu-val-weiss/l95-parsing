@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from utils import CONLLU_COLS, DEP_REL_COLS, INDEX_COLS
-from utils.task_data import _read_f, load_dep_rel, load_pos_tags
+from src.utils import CONLLU_COLS, DEP_REL_COLS, INDEX_COLS
+from src.utils.task_data import _read_f, load_dep_rel, load_pos_tags
 
 
 def generate_conll(

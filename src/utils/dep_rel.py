@@ -8,7 +8,7 @@ import networkx as nx
 import pyperclip
 from networkx.drawing.nx_latex import to_latex
 
-from utils.task_data import load_dep_rel
+from src.utils.task_data import load_dep_rel
 
 if TYPE_CHECKING:
     import pandas as pd

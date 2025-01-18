@@ -10,7 +10,7 @@ from prettytable import PrettyTable
 from src.task.predict import DataFrameFormat, DependencyParser
 from src.utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
 
-from .score import EvalScore
+from .score import Accuracy
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -30,22 +30,20 @@ class DependencyRelationScore(NamedTuple):
     LS (label accuracy score)
     """
 
-    LAS: EvalScore
-    UAS: EvalScore
-    LS: EvalScore
+    LAS: Accuracy
+    UAS: Accuracy
+    LS: Accuracy
 
     def pretty_print(self) -> None:
         """Print table representation of DependencyRelationScore."""
         table = PrettyTable()
-        table.field_names = ["Metric", "Precision", "Recall", "F1"]
+        table.field_names = ["Metric", "Accuracy"]
 
         for metric_name, score in self._asdict().items():
             table.add_row(
                 [
                     metric_name,
-                    f"{score.precision:.2f}",
-                    f"{score.recall:.2f}",
-                    f"{score.f1:.2f}",
+                    f"{score:.2f}",
                 ],
             )
 
@@ -95,9 +93,9 @@ def eval_dep_rel(
     gold_labels = df_to_labels(gold)
 
     res = DependencyRelationScore(
-        EvalScore.from_sets(pred_labelled_heads, gold_labelled_heads),
-        EvalScore.from_sets(pred_unlabelled_heads, gold_unlabelled_heads),
-        EvalScore.from_sets(pred_labels, gold_labels),
+        Accuracy.from_sets(pred_labelled_heads, gold_labelled_heads),
+        Accuracy.from_sets(pred_unlabelled_heads, gold_unlabelled_heads),
+        Accuracy.from_sets(pred_labels, gold_labels),
     )
 
     logger.info("...evaluation complete!")

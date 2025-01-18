@@ -42,3 +42,31 @@ class EvalScore(NamedTuple):
         f = (2 * p * r) / (p + r) if p + r > 0.0 else 0.0
 
         return cls(p, r, f)
+
+
+class Accuracy(float):
+    """Float wrapper class representing accuracy."""
+
+    @classmethod
+    def from_sets(cls, pred_set: set, gold_set: set) -> Accuracy:
+        """Calculate accuracy from predicted and gold sets.
+
+        Args:
+            pred_set (set): Set containing predictions.
+            gold_set (set): Set containing ground truth values.
+
+        Returns:
+            Accuracy: Returns corresponding accuracy.
+
+        """
+        correct = len(pred_set & gold_set)
+        pred = len(pred_set)
+        gold = len(gold_set)
+
+        if pred != gold:
+            msg = "Both sets must be the same length to compute accuracy correctly."
+            raise ValueError(msg)
+
+        p = correct / pred
+
+        return cls(p)

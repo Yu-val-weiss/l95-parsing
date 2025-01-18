@@ -5,7 +5,7 @@ This repository was written for L95's final project.
 
 ## Requirements
 
-- Python >= 3.12
+- Python 3.12
 - Poetry for dependency management
 
 ### Poetry

@@ -71,9 +71,9 @@ src/
 ├── utils/                  # Utility functions
 │   ├── conllu.py           # Conllu format utils
 │   ├── constituency.py     # Constituency parser utils
-│   ├── dep_rel.py          # Dependence relation utils
+│   ├── dep_rel.py          # dependency relation utils
 │   ├── parse_task_file.py  # File parsing utilities
-│   ├── stan2uni.ini        # Contains rules for converting Stanford dependence tags to UD
+│   ├── stan2uni.ini        # Contains rules for converting Stanford dependency tags to UD
 │   ├── stanza.py           # Stanza-specific utilities  
 │   └── task_data.py        # Task data handling functions
 └── main.py                 # CLI for prediction/evaluation/visualisation.

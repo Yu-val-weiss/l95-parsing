@@ -13,7 +13,7 @@ def generate_conll(
     dep_rel_file: str = "task_files/dep_rel.txt",
     pos_tag_file: str = "task_files/pos_tags.txt",
 ) -> pd.DataFrame:
-    """Dump dependence relation DataFrame to file in CONLL-U format.
+    """Dump dependency relation DataFrame to file in CONLL-U format.
 
     Args:
         file (str): Where to dump.

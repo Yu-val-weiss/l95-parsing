@@ -116,7 +116,7 @@ def cli_eval_constituencies(
 
 @cli.group()
 def predict() -> None:
-    """Predict dependence relation or constituency parsing on input."""
+    """Predict dependency relation or constituency parsing on input."""
 
 
 @predict.command(name="dep_rel")
@@ -148,7 +148,7 @@ def pred_dep_rel(
     download_method: str,
     text: str,
 ) -> None:
-    """Predict dependence relation parse on given text.
+    """Predict dependency relation parse on given text.
 
     Text is the input string to parse.
     """
@@ -185,7 +185,7 @@ def pred_const_parse(
 
 @cli.group()
 def visualise() -> None:
-    """Visualise constituency or dependence relation parses."""
+    """Visualise constituency or dependency relation parses."""
 
 
 @visualise.command()
@@ -226,7 +226,7 @@ def constituency(file: str, indices: tuple[int]) -> None:
     help="Indices of sentences to visualise.",
 )
 def dep_rel(file: str, indices: tuple[int]) -> None:
-    """Visualise dependence relations from a given file, and copy them to clipboard."""
+    """Visualise dependency relations from a given file, and copy them to clipboard."""
     parses = load_dep_rel(file)
     latexs = []
     for i in indices:

@@ -77,7 +77,7 @@ def load_dep_rel(file: str = "task_files/dep_rel_fixed.txt") -> pd.DataFrame:
 
 
 def dump_dep_rel(dep_rel_df: pd.DataFrame, file: str) -> None:
-    """Dump dependence relation DataFrame to file.
+    """Dump dependency relation DataFrame to file.
 
     Args:
         dep_rel_df (pd.DataFrame): DataFrame to dump.
@@ -118,7 +118,7 @@ def load_pos_tags(file: str = "task_files/pos_tags.txt") -> pd.DataFrame:
 
 
 def dump_pos_tags(pos_tag_df: pd.DataFrame, file: str) -> None:
-    """Dump dependence relation DataFrame to file.
+    """Dump dependency relation DataFrame to file.
 
     Args:
         pos_tag_df (pd.DataFrame): DataFrame to dump.

@@ -47,7 +47,15 @@ All necessary models will be automatically downloaded.
 To get information about the CLI run the following:
 
 ```bash
-poetry run main --help
+poetry run cli --help
+```
+
+Can also run each of the options (`evaluate`, `predict` and `visualise`) directly with
+
+```bash
+poetry run evaluate
+poetry run predict
+poetry run visualise
 ```
 
 ## Project Structure

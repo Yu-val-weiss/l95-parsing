@@ -22,6 +22,9 @@ nltk = "^3.9.1"
 
 [tool.poetry.scripts]
 cli = "src.main:cli"
+evaluate = "src.main:evaluate"
+predict = "src.main:predict"
+visualise = "src.main:visualise"
 
 [build-system]
 requires = ["poetry-core"]

@@ -7,8 +7,8 @@ import pyperclip
 from stanza.pipeline.core import DownloadMethod
 
 from src.task.eval import eval_const, eval_dep_rel
-from src.task.predict import DataFrameFormat, DependencyParser
-from src.utils.constituency import tree_to_latex
+from src.task.predict import ConstituencyParser, DataFrameFormat, DependencyParser
+from src.utils.constituency import remove_top, tree_to_latex, wipe_empty_tags
 from src.utils.dep_rel import df_to_tikz_dependency
 from src.utils.task_data import load_constituency_parses, load_dep_rel
 
@@ -48,12 +48,12 @@ class RangeType(click.ParamType):
 
 @click.group()
 def cli() -> None:
-    """Run CLI for evaluation and prediction."""
+    """CLI for L95 final task. Runs evaluation, prediction and visualisation."""
 
 
 @cli.group()
 def evaluate() -> None:
-    """Evaluate."""
+    """Run task file evaluation. Runs the relevant prediction and evaluation code."""
 
 
 @evaluate.command(name="dep_rel")
@@ -80,7 +80,7 @@ def cli_eval_dep_rel(
     gold_file: None | str = None,
     save_predictions: None | str = None,
 ) -> None:
-    """CLI for dependency relation evaluation."""
+    """Run dependency relation evaluation."""
     res = eval_dep_rel(sentences_file, gold_file, save_predictions)
     res.pretty_print()
 
@@ -109,17 +109,17 @@ def cli_eval_constituencies(
     gold_file: None | str = None,
     save_predictions: None | str = None,
 ) -> None:
-    """CLI for constituency parsing evaluation."""
+    """Run constituency parsing evaluation."""
     res = eval_const(sentences_file, gold_file, save_predictions)
     res.pretty_print()
 
 
 @cli.group()
 def predict() -> None:
-    """Predict."""
+    """Predict dependence relation or constituency parsing on input."""
 
 
-@predict.command()
+@predict.command(name="dep_rel")
 @click.option(
     "--df-format",
     type=click.Choice(
@@ -142,13 +142,13 @@ def predict() -> None:
     help="Method to use for downloading Stanza models.",
 )
 @click.argument("text")
-def dependency_parse(
+def pred_dep_rel(
     df_format: str,
     device: str,
     download_method: str,
     text: str,
 ) -> None:
-    """Command-line interface for dependency parsing.
+    """Predict dependence relation parse on given text.
 
     Text is the input string to parse.
     """
@@ -161,9 +161,31 @@ def dependency_parse(
     click.echo(result)
 
 
+@predict.command(name="constituency")
+@click.option("--pretty-print/--no-pretty-print", default=True)
+@click.argument("text")
+def pred_const_parse(
+    text: str,
+    *,
+    pretty_print: bool = True,
+) -> None:
+    """Predict constituency parse on input text.
+
+    Text is the input string to parse.
+    """
+    parser = ConstituencyParser(clean=False)
+    result = parser(text)
+
+    for r in result:
+        cleaned_r = remove_top(r)
+        click.echo(wipe_empty_tags(cleaned_r))
+        if pretty_print:
+            cleaned_r.pretty_print()
+
+
 @cli.group()
 def visualise() -> None:
-    """Visualise."""
+    """Visualise constituency or dependence relation parses."""
 
 
 @visualise.command()
@@ -178,7 +200,7 @@ def visualise() -> None:
     help="Indices of sentences to visualise.",
 )
 def constituency(file: str, indices: tuple[int]) -> None:
-    """CLI for constituency visualisation."""
+    """Visualise constituency parses from a given file, and copy them to clipboard."""
     parses = load_constituency_parses(file)
     latexs = []
     for i in indices:
@@ -204,7 +226,7 @@ def constituency(file: str, indices: tuple[int]) -> None:
     help="Indices of sentences to visualise.",
 )
 def dep_rel(file: str, indices: tuple[int]) -> None:
-    """CLI for constituency visualisation."""
+    """Visualise dependence relations from a given file, and copy them to clipboard."""
     parses = load_dep_rel(file)
     latexs = []
     for i in indices:

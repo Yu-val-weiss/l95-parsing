@@ -44,6 +44,12 @@ poetry run main [OPTIONS] COMMAND [ARGS]
 
 All necessary models will be automatically downloaded.
 
+To get information about the CLI run
+
+```bash
+poetry run main --help
+```
+
 ## Project Structure
 
 ```txt

@@ -178,7 +178,7 @@ def extract_all_constituents(
         tuple[set[tuple], list[set[tuple]]: First item of tuple is a list of either
         (sent_id, start_index, end_index, label)
         or (sent_id, start_index, end_index).
-        Second item is a list containing each tree's constituents.
+        Second item is a list of sets, each of which contains each tree's constituents.
 
     """
     big_set = set()

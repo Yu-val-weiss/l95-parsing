@@ -65,14 +65,25 @@ src/
 ├── task/                   # Core parsing functionality
 │   ├── eval/               # Evaluation metrics and scoring
 │   │   ├── constituency.py # Constituency parsing evaluation
+│   │   ├── dep_rel.py      # Dependency parsing evaluation
 │   │   └── score.py        # Scoring utilities
 │   └── predict.py          # Main parsing implementations
 ├── utils/                  # Utility functions
+│   ├── conllu.py           # Conllu format utils
+│   ├── constituency.py     # Constituency parser utils
+│   ├── dep_rel.py          # Dependence relation utils
 │   ├── parse_task_file.py  # File parsing utilities
+│   ├── stan2uni.ini        # Contains rules for converting Stanford dependence tags to UD
 │   ├── stanza.py           # Stanza-specific utilities  
 │   └── task_data.py        # Task data handling functions
-task_files/                 # Input/output files
+└── main.py                 # CLI for prediction/evaluation/visualisation.
+
+prediction_files/           # Input (task) files
+├── constituencies.txt      # Predicted constituency parses
+└── dep_rel.txt             # Predicted dependency relations
+
+task_files/                 # Input (task) files
 ├── sentences.txt           # Input sentences
 ├── constituencies.txt      # Gold constituency parses
-└── dep_rel.txt             # Dependency relations
+└── dep_rel.txt             # Gold dependency relations
 ```

@@ -42,21 +42,23 @@ Use the CLI interface:
 poetry run main [OPTIONS] COMMAND [ARGS]
 ```
 
+All necessary models will be automatically downloaded.
+
 ## Project Structure
 
 ```txt
-l95-parsing/
+src/
 ├── task/                   # Core parsing functionality
-│   ├── eval/              # Evaluation metrics and scoring
+│   ├── eval/               # Evaluation metrics and scoring
 │   │   ├── constituency.py # Constituency parsing evaluation
-│   │   └── score.py       # Scoring utilities
-│   └── predict.py         # Main parsing implementations
-├── utils/                 # Utility functions
-│   ├── parse_task_file.py # File parsing utilities
-│   ├── stanza.py         # Stanza-specific utilities  
-│   └── task_data.py      # Data handling functions
-└── task_files/           # Input/output files
-    ├── sentences.txt     # Input sentences
-    ├── constituencies.txt # Gold constituency parses
-    └── dep_rel.txt       # Dependency relations
+│   │   └── score.py        # Scoring utilities
+│   └── predict.py          # Main parsing implementations
+├── utils/                  # Utility functions
+│   ├── parse_task_file.py  # File parsing utilities
+│   ├── stanza.py           # Stanza-specific utilities  
+│   └── task_data.py        # Task data handling functions
+task_files/                 # Input/output files
+├── sentences.txt           # Input sentences
+├── constituencies.txt      # Gold constituency parses
+└── dep_rel.txt             # Dependency relations
 ```

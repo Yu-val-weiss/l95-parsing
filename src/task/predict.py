@@ -7,6 +7,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, cast
 
 import stanza
+import torch
 from stanza.models.common.doc import Document
 from stanza.pipeline.core import DownloadMethod
 from supar import Parser
@@ -19,6 +20,10 @@ if TYPE_CHECKING:
     from nltk.tree import Tree
 
 warnings.filterwarnings(action="ignore", category=FutureWarning)
+
+
+STANZA_RESOURCES_VERSION = "1.10.0"
+STANZA_MODEL_DIR = ".stanza_resources"
 
 
 class DataFrameFormat(Enum):
@@ -41,13 +46,15 @@ class DependencyParser:
             processors="tokenize,mwt,pos,lemma,depparse",
             device=device,
             download_method=download_method,
+            resources_version=STANZA_RESOURCES_VERSION,
+            model_dir=STANZA_MODEL_DIR,
         )
 
     def __init__(
         self,
         *,
         df_format: DataFrameFormat = DataFrameFormat.DEPREL,
-        device: str = "mps",
+        device: str = "auto",
         download_method: DownloadMethod = DownloadMethod.REUSE_RESOURCES,
     ) -> None:
         """Initalises the dependency parser.
@@ -55,11 +62,19 @@ class DependencyParser:
         Args:
         df_format (DataFrameFormat, optional): Which pandas df format to use.
         Defaults to DEPREL.
-        device (str, optional): Which device to use for the pipeline. Defaults to "mps".
+        device (str, optional): Which device to use for pipeline. Defaults to "auto".
         download_method (DownloadMethod, optional): Which download method to use.
         Defaults to DownloadMethod.REUSE_RESOURCES.
 
         """
+        if device.lower() == "auto":
+            if torch.cuda.is_available():
+                device = "cuda"
+            elif torch.backends.mps.is_available():
+                device = "mps"
+            else:
+                device = "cpu"
+
         self._pipe = self._get_dep_parse_pipeline(device, download_method)
         self.df_format = df_format
 

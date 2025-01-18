@@ -132,8 +132,8 @@ def predict() -> None:
 @click.option(
     "--device",
     type=str,
-    default="mps",
-    help="Device to run the pipeline on.",
+    default="auto",
+    help="Device to run the pipeline on. Default is 'auto'.",
 )
 @click.option(
     "--download-method",

@@ -44,7 +44,7 @@ class DependencyRelationScore(NamedTuple):
             table.add_row(
                 [
                     metric_name,
-                    f"{score:.2f}",
+                    f"{score:.4f}",
                 ],
             )
 
@@ -66,7 +66,7 @@ class SpecificDepRelScore(NamedTuple):
     def pretty_print(self) -> None:
         """Print table representation of SpecifcDepRel."""
         table = PrettyTable()
-        table.title = f"{self.label} - specific evaluation"
+        table.title = f"{self.label} - dependency evaluation"
         table.field_names = ["Metric", "Precision", "Recall", "F1"]
 
         for metric_name, score in self._asdict().items():
@@ -75,9 +75,9 @@ class SpecificDepRelScore(NamedTuple):
             table.add_row(
                 [
                     metric_name,
-                    f"{score.precision:.2f}",
-                    f"{score.recall:.2f}",
-                    f"{score.f1:.2f}",
+                    f"{score.precision:.4f}",
+                    f"{score.recall:.4f}",
+                    f"{score.f1:.4f}",
                 ],
             )
 

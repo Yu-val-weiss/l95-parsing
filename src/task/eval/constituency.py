@@ -44,7 +44,7 @@ class ConstituencyScore(NamedTuple):
 
         cross_table = PrettyTable()
         cross_table.add_row([f"Cross brackets: {self.cross_brackets}"])
-        cross_table.min_table_width = 42
+        cross_table.min_table_width = 44
         cross_table.header = False
 
         for metric_name, score in self._asdict().items():
@@ -53,9 +53,9 @@ class ConstituencyScore(NamedTuple):
             table.add_row(
                 [
                     metric_name,
-                    f"{score.precision:.2f}",
-                    f"{score.recall:.2f}",
-                    f"{score.f1:.2f}",
+                    f"{score.precision:.4f}",
+                    f"{score.recall:.4f}",
+                    f"{score.f1:.4f}",
                 ],
             )
 
@@ -78,15 +78,15 @@ class SpecificConstituencyScore(NamedTuple):
     def pretty_print(self) -> None:
         """Print table representation of ConstituencyScore."""
         table = PrettyTable()
-        table.title = f"{self.label} - specific evaluation"
+        table.title = f"{self.label} - constituent evaluation"
         table.field_names = ["Metric", "Precision", "Recall", "F1"]
 
         table.add_row(
             [
                 "Labelled",
-                f"{self.labelled.precision:.2f}",
-                f"{self.labelled.recall:.2f}",
-                f"{self.labelled.f1:.2f}",
+                f"{self.labelled.precision:.4f}",
+                f"{self.labelled.recall:.4f}",
+                f"{self.labelled.f1:.4f}",
             ],
         )
 

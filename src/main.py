@@ -56,7 +56,7 @@ def evaluate() -> None:
     """Run task file evaluation. Runs the relevant prediction and evaluation code."""
 
 
-@evaluate.command(name="dep_rel")
+@evaluate.command(name="dep-rel")
 @click.option(
     "--sentences-file",
     default=None,
@@ -148,7 +148,7 @@ def predict() -> None:
     """Predict dependency relation or constituency parsing on input."""
 
 
-@predict.command(name="dep_rel")
+@predict.command(name="dep-rel")
 @click.option(
     "--df-format",
     type=click.Choice(
@@ -281,7 +281,7 @@ def constituency(file: str, indices: tuple[int]) -> None:
     click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
 
 
-@visualise.command("dep_rel")
+@visualise.command("dep-rel")
 @click.argument(
     "file",
     type=click.Path(exists=True),

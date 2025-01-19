@@ -51,7 +51,7 @@ def cli() -> None:
     """CLI for L95 final task. Runs evaluation, prediction and visualisation."""
 
 
-@cli.group()
+@cli.group(context_settings={"show_default": True})
 def evaluate() -> None:
     """Run task file evaluation. Runs the relevant prediction and evaluation code."""
 
@@ -143,7 +143,7 @@ def cli_eval_constituencies(
     res.pretty_print()
 
 
-@cli.group()
+@cli.group(context_settings={"show_default": True})
 def predict() -> None:
     """Predict dependency relation or constituency parsing on input."""
 
@@ -156,13 +156,15 @@ def predict() -> None:
         case_sensitive=False,
     ),
     default=DataFrameFormat.DEPREL.value,
-    help="Format of the output DataFrame as defined in `DataFrameFormat`.",
+    help="Format of the output DataFrame as defined in 'DataFrameFormat'.",
 )
 @click.option(
     "--device",
     type=str,
     default="auto",
-    help="Device to run the pipeline on. Default is 'auto'.",
+    show_default=False,
+    help="Device to run the pipeline on. "
+    "Defaults to 'auto' which automatically picks a device.",
 )
 @click.option(
     "--download-method",
@@ -191,12 +193,16 @@ def pred_dep_rel(
 
 
 @predict.command(name="constituency")
-@click.option("--pretty-print/--no-pretty-print", default=True)
+@click.option(
+    "--pretty-print/--no-pretty-print",
+    default=True,
+    help="Pretty print the result.",
+)
 @click.option(
     "--parser",
     "parser_name",
     default="con-crf-roberta-en",
-    help="Which pre-trained parser to use",
+    help="Which pre-trained parser to use.",
     type=click.Choice(["con-crf-en", "con-crf-roberta-en"]),
 )
 @click.argument("text")
@@ -220,7 +226,7 @@ def pred_const_parse(
             cleaned_r.pretty_print()
 
 
-@cli.group()
+@cli.group(context_settings={"show_default": True})
 def visualise() -> None:
     """Visualise constituency or dependency relation parses."""
 

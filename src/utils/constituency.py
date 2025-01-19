@@ -1,7 +1,5 @@
 """Utils specifically for dealing with constituency parses."""
 
-import re
-
 import pyperclip
 from nltk.tree import Tree
 
@@ -57,20 +55,33 @@ def clean_tree(tree: Tree) -> Tree:
 
 
 def tree_to_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:
-    """Convert a tree to a `qtree` latex tree.
+    """Convert a tree to a `forest` latex tree.
 
     Args:
         tree (Tree): the tree to convert.
         copy_to_clipboard (bool, optional): Set to true to copy
 
     Returns:
-        str: the LaTeX string defining the dependency graph.
+        str: the LaTeX string defining the constituency tree.
         The string is optionally copied to the clipboard.
 
     """
-    s = tree.pformat_latex_qtree()
-    s = re.sub(r"(\]\s+)\.(\s+\])", r"\g<1>{.}\g<2>", s)
+    s = _tree_to_latex(tree)
     if copy_to_clipboard:
         pyperclip.copy(s)
         print("Copied LaTeX string to clipboard!")
     return s
+
+
+def _tree_to_latex(tree: Tree) -> str:
+    str_parts = [f"[{tree.label() if tree.label() != '_' else r'\_'}"]
+    for subtree in tree:
+        if isinstance(subtree, Tree):
+            str_parts.append(_tree_to_latex(subtree))
+        else:
+            str_parts.append(f"[{subtree}]")
+    if str_parts[-1][-1] == "]":
+        str_parts[-1] += "]"
+    else:
+        str_parts.append("]")
+    return " ".join(str_parts)

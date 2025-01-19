@@ -112,6 +112,13 @@ def cli_eval_dep_rel(
     help="Path to save the prediction results.",
 )
 @click.option(
+    "--parser",
+    "parser_name",
+    default="con-crf-roberta-en",
+    help="Which pre-trained parser to use",
+    type=click.Choice(["con-crf-en", "con-crf-roberta-en"]),
+)
+@click.option(
     "--filter-label",
     default=None,
     type=str,
@@ -122,9 +129,17 @@ def cli_eval_constituencies(
     gold_file: None | str = None,
     save_predictions: None | str = None,
     filter_label: None | str = None,
+    *,
+    parser_name: str,
 ) -> None:
     """Run constituency parsing evaluation."""
-    res = eval_const(sentences_file, gold_file, save_predictions, filter_label)
+    res = eval_const(
+        sentences_file,
+        gold_file,
+        save_predictions,
+        filter_label,
+        parser_name=parser_name,
+    )
     res.pretty_print()
 
 
@@ -177,17 +192,25 @@ def pred_dep_rel(
 
 @predict.command(name="constituency")
 @click.option("--pretty-print/--no-pretty-print", default=True)
+@click.option(
+    "--parser",
+    "parser_name",
+    default="con-crf-roberta-en",
+    help="Which pre-trained parser to use",
+    type=click.Choice(["con-crf-en", "con-crf-roberta-en"]),
+)
 @click.argument("text")
 def pred_const_parse(
     text: str,
     *,
     pretty_print: bool = True,
+    parser_name: str,
 ) -> None:
     """Predict constituency parse on input text.
 
     Text is the input string to parse.
     """
-    parser = ConstituencyParser(clean=False)
+    parser = ConstituencyParser(path=parser_name, clean=False)
     result = parser(text)
 
     for r in result:

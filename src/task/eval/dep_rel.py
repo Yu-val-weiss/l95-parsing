@@ -120,15 +120,19 @@ def eval_dep_rel(
 
     logger.info("Evaluating...")
 
-    pred_labelled_heads = df_to_heads(result, labelled=True)
-    pred_unlabelled_heads = df_to_heads(result, labelled=False)
-    pred_labels = df_to_labels(result)
+    if filter_label:
+        filter_label = filter_label.lower()
 
-    gold_labelled_heads = df_to_heads(gold, labelled=True)
+    pred_labelled_heads = df_to_heads(result, labelled=True, filter_label=filter_label)
+    pred_unlabelled_heads = df_to_heads(result, labelled=False)
+
+    gold_labelled_heads = df_to_heads(gold, labelled=True, filter_label=filter_label)
     gold_unlabelled_heads = df_to_heads(gold, labelled=False)
-    gold_labels = df_to_labels(gold)
 
     if not filter_label:
+        pred_labels = df_to_labels(result)
+        gold_labels = df_to_labels(gold)
+
         res = DependencyRelationScore(
             Accuracy.from_sets(pred_labelled_heads, gold_labelled_heads),
             Accuracy.from_sets(pred_unlabelled_heads, gold_unlabelled_heads),
@@ -136,17 +140,8 @@ def eval_dep_rel(
         )
 
     else:
-        filter_label = filter_label.lower()
-
-        pred_labelled_heads = {
-            x for x in pred_labelled_heads if x[2].lower() == filter_label
-        }
-        pred_labels = {x for x in pred_labels if x[2].lower() == filter_label}
-        gold_labelled_heads = {
-            x for x in gold_labelled_heads if x[2].lower() == filter_label
-        }
-        gold_labels = {x for x in gold_labels if x[2].lower() == filter_label}
-
+        pred_labels = df_get_label(result, filter_label)
+        gold_labels = df_get_label(gold, filter_label)
         if len(pred_labelled_heads) == 0 and len(gold_labelled_heads) == 0:
             msg = "Label not found in either predicted or gold set."
             raise ValueError(msg)
@@ -167,7 +162,12 @@ type UnlabelledDeps = tuple[int, int, int]
 
 
 @overload
-def df_to_heads(df: pd.DataFrame, *, labelled: Literal[True]) -> set[LabelledDeps]: ...
+def df_to_heads(
+    df: pd.DataFrame,
+    *,
+    labelled: Literal[True],
+    filter_label: str | None = None,
+) -> set[LabelledDeps]: ...
 
 
 @overload
@@ -175,6 +175,7 @@ def df_to_heads(
     df: pd.DataFrame,
     *,
     labelled: Literal[False],
+    filter_label: str | None = None,
 ) -> set[UnlabelledDeps]: ...
 
 
@@ -182,12 +183,14 @@ def df_to_heads(
     df: pd.DataFrame,
     *,
     labelled: bool = True,
+    filter_label: str | None = None,
 ) -> set[LabelledDeps] | set[UnlabelledDeps]:
     """Generate a set containing each dependency relation.
 
     Args:
         df (pd.DataFrame): A `DEPREL_COLS` format pandas DataFrame
         labelled (bool): Decides whether to return labelled or unlabelled tuples.
+        filter_label (None | str, optional): Label to filter on.
 
     Returns:
         set[tuple]: A set of (sent_id, word_id, deprel, head) tuples if labelled.
@@ -195,11 +198,19 @@ def df_to_heads(
 
 
     """
+    if not labelled and filter_label:
+        msg = "Cannot set labelled to false and filter by label."
+        raise ValueError(msg)
+
+    itertuples = df.itertuples()
+    if filter_label:
+        itertuples = (row for row in itertuples if row.deprel.lower() == filter_label)  # type: ignore
+
     return {
         (*row.Index, row.deprel.lower(), row.head)  # type: ignore
         if labelled
         else (*row.Index, row.head)  # type: ignore
-        for row in df.itertuples()
+        for row in itertuples
     }
 
 
@@ -214,6 +225,25 @@ def df_to_labels(df: pd.DataFrame) -> set[tuple[int, int, str]]:
 
     """
     return {(*row.Index, row.deprel.lower()) for row in df.itertuples()}  # type: ignore
+
+
+def df_get_label(df: pd.DataFrame, label: str) -> set[tuple[int, int, str]]:
+    """Generate a set containing each token of the given label.
+
+    Args:
+        df (pd.DataFrame): A `DEPREL_COLS` format pandas DataFrame
+        label (str): The label to get
+
+    Returns:
+        set[tuple[int, int, str]]: A set of (sent_id, word_id, deprel) tuples
+
+    """
+    label = label.lower()
+    return {
+        (*row.Index, row.deprel.lower())  # type: ignore
+        for row in df.itertuples()
+        if row.deprel.lower() == label  # type: ignore
+    }
 
 
 if __name__ == "__main__":

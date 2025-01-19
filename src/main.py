@@ -16,6 +16,8 @@ from src.utils.task_data import load_constituency_parses, load_dep_rel
 class RangeType(click.ParamType):
     """Custom range type for visualisation CLI."""
 
+    name = "index_range"
+
     def convert(
         self,
         value: str,
@@ -264,9 +266,14 @@ def visualise() -> None:
     "--indices",
     default="1-10",
     type=RangeType(),
-    help="Indices of sentences to visualise.",
+    help="Indices of sentences to visualise. Accepts ranges e.g. 1,3-5,6",
 )
-def constituency(file: str, indices: tuple[int]) -> None:
+@click.option(
+    "--copy/--no-copy",
+    default=False,
+    help="Copy (or don't) LaTeX to clipboard.",
+)
+def constituency(file: str, indices: tuple[int], *, copy: bool) -> None:
     """Visualise constituency parses from a file, and copy latex reprs to clipboard."""
     parses = load_constituency_parses(file)
     latexs = []
@@ -277,8 +284,9 @@ def constituency(file: str, indices: tuple[int]) -> None:
         latexs.append(f"% Sentence {i}\n{ltx}")
         click.echo("=" * 50)
 
-    pyperclip.copy("\n\n".join(latexs))
-    click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
+    if copy:
+        pyperclip.copy("\n\n".join(latexs))
+        click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
 
 
 @visualise.command("dep-rel")
@@ -290,9 +298,14 @@ def constituency(file: str, indices: tuple[int]) -> None:
     "--indices",
     default="1-10",
     type=RangeType(),
-    help="Indices of sentences to visualise.",
+    help="Indices of sentences to visualise. Accepts ranges e.g. 1,3-5,6",
 )
-def dep_rel(file: str, indices: tuple[int]) -> None:
+@click.option(
+    "--copy/--no-copy",
+    default=False,
+    help="Copy (or don't) LaTeX to clipboard.",
+)
+def dep_rel(file: str, indices: tuple[int], *, copy: bool) -> None:
     """Visualise dependency relations from a file, and copy latex reprs to clipboard."""
     parses = load_dep_rel(file)
     latexs = []
@@ -303,8 +316,9 @@ def dep_rel(file: str, indices: tuple[int]) -> None:
         latexs.append(f"% Sentence {i}\n{ltx}")
         click.echo("=" * 50)
 
-    pyperclip.copy("\n\n".join(latexs))
-    click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
+    if copy:
+        pyperclip.copy("\n\n".join(latexs))
+        click.echo("\n\n📋 Successfully copied LaTeX trees to clipboard!")
 
 
 if __name__ == "__main__":

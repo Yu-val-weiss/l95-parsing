@@ -205,12 +205,33 @@ def pred_dep_rel(
     help="Which pre-trained parser to use.",
     type=click.Choice(["con-crf-en", "con-crf-roberta-en"]),
 )
+@click.option(
+    "--remove-top/--keep-top",
+    "should_remove_top",
+    default=True,
+    help="Whether to remove the TOP node from the parse.",
+)
+@click.option(
+    "--wipe-empty-tags/--keep-empty-tags",
+    "should_wipe_empty",
+    default=True,
+    help="Whether to wipe empty tags from the parse.",
+)
+@click.option(
+    "--latex",
+    is_flag=True,
+    help="Print forest LaTeX code to draw the parse. "
+    "NOTE: needs to be enclosed in \\begin{forest} \\end{forest} tags.",
+)
 @click.argument("text")
 def pred_const_parse(
     text: str,
     *,
     pretty_print: bool = True,
     parser_name: str,
+    should_remove_top: bool,
+    should_wipe_empty: bool,
+    latex: bool,
 ) -> None:
     """Predict constituency parse on input text.
 
@@ -220,10 +241,13 @@ def pred_const_parse(
     result = parser(text)
 
     for r in result:
-        cleaned_r = remove_top(r)
-        click.echo(wipe_empty_tags(cleaned_r))
+        cleaned_r = remove_top(r) if should_remove_top else r
+        cleaned_r = wipe_empty_tags(cleaned_r) if should_wipe_empty else cleaned_r
+        click.echo(cleaned_r)
         if pretty_print:
             cleaned_r.pretty_print()
+        if latex:
+            click.echo(tree_to_latex(cleaned_r))
 
 
 @cli.group(context_settings={"show_default": True})
@@ -243,7 +267,7 @@ def visualise() -> None:
     help="Indices of sentences to visualise.",
 )
 def constituency(file: str, indices: tuple[int]) -> None:
-    """Visualise constituency parses from a given file, and copy them to clipboard."""
+    """Visualise constituency parses from a file, and copy latex reprs to clipboard."""
     parses = load_constituency_parses(file)
     latexs = []
     for i in indices:
@@ -269,7 +293,7 @@ def constituency(file: str, indices: tuple[int]) -> None:
     help="Indices of sentences to visualise.",
 )
 def dep_rel(file: str, indices: tuple[int]) -> None:
-    """Visualise dependency relations from a given file, and copy them to clipboard."""
+    """Visualise dependency relations from a file, and copy latex reprs to clipboard."""
     parses = load_dep_rel(file)
     latexs = []
     for i in indices:

@@ -12,6 +12,11 @@ from src.utils.constituency import remove_top, tree_to_latex, wipe_empty_tags
 from src.utils.dep_rel import df_to_tikz_dependency
 from src.utils.task_data import load_constituency_parses, load_dep_rel
 
+BAD_FILTER_LABEL_MSG = (
+    "--filter-label '{}' not found in either hypothesis or reference parse."
+)
+FILTER_LABEL_OPTION_NAME = "--filter-label"
+
 
 class RangeType(click.ParamType):
     """Custom range type for visualisation CLI."""
@@ -90,7 +95,14 @@ def cli_eval_dep_rel(
     filter_label: None | str = None,
 ) -> None:
     """Run dependency relation evaluation."""
-    res = eval_dep_rel(sentences_file, gold_file, save_predictions, filter_label)
+    try:
+        res = eval_dep_rel(sentences_file, gold_file, save_predictions, filter_label)
+    except ValueError as v:
+        raise click.BadOptionUsage(
+            FILTER_LABEL_OPTION_NAME,
+            BAD_FILTER_LABEL_MSG.format(filter_label),
+        ) from v
+
     res.pretty_print()
 
 
@@ -135,13 +147,20 @@ def cli_eval_constituencies(
     parser_name: str,
 ) -> None:
     """Run constituency parsing evaluation."""
-    res = eval_const(
-        sentences_file,
-        gold_file,
-        save_predictions,
-        filter_label,
-        parser_name=parser_name,
-    )
+    try:
+        res = eval_const(
+            sentences_file,
+            gold_file,
+            save_predictions,
+            filter_label,
+            parser_name=parser_name,
+        )
+    except ValueError as v:
+        raise click.BadOptionUsage(
+            FILTER_LABEL_OPTION_NAME,
+            BAD_FILTER_LABEL_MSG.format(filter_label),
+        ) from v
+
     res.pretty_print()
 
 

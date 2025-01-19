@@ -120,9 +120,6 @@ def eval_dep_rel(
 
     logger.info("Evaluating...")
 
-    if filter_label:
-        filter_label = filter_label.lower()
-
     pred_labelled_heads = df_to_heads(result, labelled=True, filter_label=filter_label)
     pred_unlabelled_heads = df_to_heads(result, labelled=False)
 
@@ -155,6 +152,25 @@ def eval_dep_rel(
     logger.info("...evaluation complete!")
 
     return res
+
+
+def _deprel_label_filter_pred(filter_label: str, deprel: str) -> bool:
+    """Predicate for filtering by deprel label.
+
+    Args:
+        filter_label (str): Label to filter by
+        deprel (str): The deprel to check
+
+    Returns:
+        bool: whether filter matches or not
+
+    """
+    filter_label = filter_label.lower()
+    deprel = deprel.lower()
+    if ":" in filter_label:
+        return filter_label == deprel
+    main, *_ = deprel.split(":")
+    return filter_label == main
 
 
 type LabelledDeps = tuple[int, int, str, int]
@@ -204,7 +220,11 @@ def df_to_heads(
 
     itertuples = df.itertuples()
     if filter_label:
-        itertuples = (row for row in itertuples if row.deprel.lower() == filter_label)  # type: ignore
+        itertuples = (
+            row
+            for row in itertuples
+            if _deprel_label_filter_pred(filter_label, row.deprel)  # type: ignore
+        )
 
     return {
         (*row.Index, row.deprel.lower(), row.head)  # type: ignore
@@ -242,7 +262,7 @@ def df_get_label(df: pd.DataFrame, label: str) -> set[tuple[int, int, str]]:
     return {
         (*row.Index, row.deprel.lower())  # type: ignore
         for row in df.itertuples()
-        if row.deprel.lower() == label  # type: ignore
+        if _deprel_label_filter_pred(label, row.deprel)  # type: ignore
     }
 
 

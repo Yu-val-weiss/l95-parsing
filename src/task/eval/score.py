@@ -37,8 +37,8 @@ class EvalScore(NamedTuple):
         pred = len(pred_set)
         gold = len(gold_set)
 
-        p = correct / pred
-        r = correct / gold
+        p = correct / pred if pred != 0 else 0.0
+        r = correct / gold if gold != 0 else 0.0
         f = (2 * p * r) / (p + r) if p + r > 0.0 else 0.0
 
         return cls(p, r, f)

@@ -1,5 +1,7 @@
 """Utils specifically for dealing with constituency parses."""
 
+from typing import cast
+
 import pyperclip
 from nltk.tree import Tree
 
@@ -52,6 +54,74 @@ def clean_tree(tree: Tree) -> Tree:
 
     """
     return wipe_empty_tags(remove_top(tree))
+
+
+def flatten_children(tree: Tree) -> Tree:
+    """Flatten any children in the tree.
+
+    Flattening children means patterns of (... (A x) y (A z) ...) -> (... (A x y z) ...)
+    iff y is 'or' or 'and'.
+
+    Args:
+        tree (Tree): tree to flatten. The tree should have had all empty tags wiped.
+
+    Returns:
+        Tree: tree with flattened children.
+
+    """
+    # base case: if the input is not a Tree, return
+    if not isinstance(tree, Tree):
+        return tree
+
+    # if the tree has fewer than 3 children, recursively flatten its children
+    if len(tree) < 3:
+        return Tree(tree.label(), [flatten_children(child) for child in tree])
+
+    # check if all children are leaves (not Trees)
+    if all(not isinstance(child, Tree) for child in tree):
+        return tree
+
+    new_tree = []
+    i = 0
+
+    while i < len(tree):
+        current = tree[i]
+
+        # if the current element is not a Tree, add it to new_tree and continue
+        if not isinstance(current, Tree):
+            new_tree.append(current)
+            i += 1
+            continue
+
+        left = cast(Tree, current)
+        if (
+            i + 2 < len(tree)
+            and isinstance(tree[i + 1], str)
+            and isinstance(tree[i + 2], Tree)
+        ):
+            mid = cast(str, tree[i + 1])
+            right = cast(Tree, tree[i + 2])
+
+            # check if the middle token is "and" or "or"
+            # and that the labels of left and right match
+            if mid.lower() in {"and", "or"} and left.label() == right.label():
+                new_tree.append(Tree(left.label(), [left[0], mid, right[0]]))
+                i += 3
+                continue
+
+        # otherwise, flatten the current child and add it to the new tree
+        new_tree.append(flatten_children(left))
+        i += 1
+
+    # if the new tree has a single child with the same label, return that child directly
+    if (
+        len(new_tree) == 1
+        and isinstance(new_tree[0], Tree)
+        and new_tree[0].label() == tree.label()
+    ):
+        return new_tree[0]
+
+    return Tree(tree.label(), new_tree)
 
 
 def tree_to_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:

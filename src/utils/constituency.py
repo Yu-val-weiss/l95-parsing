@@ -74,14 +74,22 @@ def tree_to_latex(tree: Tree, *, copy_to_clipboard: bool = False) -> str:
 
 
 def _tree_to_latex(tree: Tree) -> str:
-    str_parts = [f"[{tree.label() if tree.label() != '_' else r'\_'}"]
+    str_parts = [f"[{_clean_tree_label(tree.label())}"]
     for subtree in tree:
         if isinstance(subtree, Tree):
             str_parts.append(_tree_to_latex(subtree))
         else:
-            str_parts.append(f"[{subtree}]")
+            str_parts.append(f"[{_clean_tree_label(subtree)}]")
     if str_parts[-1][-1] == "]":
         str_parts[-1] += "]"
     else:
         str_parts.append("]")
     return " ".join(str_parts)
+
+
+def _clean_tree_label(label: str) -> str:
+    if label == "_":
+        return r"\_"
+    if label == ",":
+        return r"{,}"
+    return label

@@ -32,11 +32,11 @@ def generate_conll(
         "id": dep_rel_df.index.get_level_values("word_id"),
         "form": dep_rel_df["word"],
         "lemma": pos_tag_df["lemma"],
-        "upos": pos_tag_df["ud_tag"],
-        "xpos": "_",
+        "upos": pos_tag_df["upos"],
+        "xpos": pos_tag_df["upos"],
         "feats": "_",
-        "head": dep_rel_df["head"],  # Preserve "head"
-        "deprel": dep_rel_df["deprel"],  # Preserve "deprel"
+        "head": dep_rel_df["head"],
+        "deprel": dep_rel_df["deprel"],
         "deps": "_",
         "misc": "_",
     }

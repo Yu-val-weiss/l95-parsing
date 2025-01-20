@@ -87,9 +87,12 @@ def _tree_to_latex(tree: Tree) -> str:
     return " ".join(str_parts)
 
 
+FOREST_SPECIAL_CHARS = [",", "=", "[", "]"]
+
+
 def _clean_tree_label(label: str) -> str:
     if label == "_":
         return r"\_"
-    if label == ",":
-        return r"{,}"
+    if any(c in label for c in FOREST_SPECIAL_CHARS):
+        return f"{{{label}}}"
     return label

@@ -312,7 +312,7 @@ def constituency(file: str, indices: tuple[int], *, copy: bool) -> None:
     for i in indices:
         click.echo(f"Sentence {i}")
         parses[i - 1].pretty_print()
-        click.echo(ltx := tree_to_latex(parses[i]))
+        click.echo(ltx := tree_to_latex(parses[i - 1]))
         latexs.append(f"% Sentence {i}\n{ltx}")
         click.echo("=" * 50)
 

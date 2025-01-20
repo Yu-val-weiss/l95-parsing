@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Run as a script to parse the raw task file."""
 
 import re
@@ -7,7 +8,12 @@ from pathlib import Path
 from depedit import DepEdit
 
 from src.utils.conllu import convert_to_dep_rel, generate_conll, load_conll
-from src.utils.task_data import dump_dep_rel
+from src.utils.constituency import flatten_children
+from src.utils.task_data import (
+    dump_constituency_parses,
+    dump_dep_rel,
+    load_constituency_parses,
+)
 
 with Path("task_files/task_raw.txt").open() as f:
     data = f.read()
@@ -53,11 +59,19 @@ with (
             f.write(section[cat])
             f.write("\n\n")
 
+# fixed dependency relations
 generate_conll()
-dep = DepEdit("utils/stan2uni.ini")
+dep = DepEdit("src/utils/stan2uni.ini")
 with Path("task_files/task.conllu").open() as f:
     fixed = dep.run_depedit(infile=f.read())
 with Path("task_files/task_fixed.conllu").open("w") as f:
     f.write(fixed)
 fixed_df = load_conll("task_files/task_fixed.conllu")
 dump_dep_rel(convert_to_dep_rel(fixed_df), "task_files/dep_rel_fixed.txt")
+
+# flattened constituencies
+unflattened = load_constituency_parses()
+dump_constituency_parses(
+    [flatten_children(t) for t in unflattened],
+    "task_files/constituencies_flat.txt",
+)

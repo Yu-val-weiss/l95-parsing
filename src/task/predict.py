@@ -40,10 +40,13 @@ class DependencyParser:
     def _get_dep_parse_pipeline(
         device: str,
         download_method: DownloadMethod,
+        *,
+        pretagged: bool = False,
     ) -> stanza.Pipeline:
         return stanza.Pipeline(
             lang="en",
-            processors="tokenize,mwt,pos,lemma,depparse",
+            processors="depparse" if pretagged else "tokenize,mwt,pos,lemma,depparse",
+            depparse_pretagged=pretagged,
             device=device,
             download_method=download_method,
             resources_version=STANZA_RESOURCES_VERSION,
@@ -56,6 +59,7 @@ class DependencyParser:
         df_format: DataFrameFormat = DataFrameFormat.DEPREL,
         device: str = "auto",
         download_method: DownloadMethod = DownloadMethod.REUSE_RESOURCES,
+        pretagged: bool = False,
     ) -> None:
         """Initalises the dependency parser.
 
@@ -65,6 +69,7 @@ class DependencyParser:
         device (str, optional): Which device to use for pipeline. Defaults to "auto".
         download_method (DownloadMethod, optional): Which download method to use.
         Defaults to DownloadMethod.REUSE_RESOURCES.
+        pretagged (bool, default False): Whether data is pretagged.
 
         """
         if device.lower() == "auto":
@@ -75,20 +80,33 @@ class DependencyParser:
             else:
                 device = "cpu"
 
-        self._pipe = self._get_dep_parse_pipeline(device, download_method)
+        self.pretagged = pretagged
+        self._pipe = self._get_dep_parse_pipeline(
+            device,
+            download_method,
+            pretagged=pretagged,
+        )
         self.df_format = df_format
 
-    def __call__(self, string: str) -> pd.DataFrame:
+    def __call__(self, parser_input: str | Document) -> pd.DataFrame:
         """Predict a dependency parse for the string.
 
         Args:
-            string (str): String containing sentence/s to parse.
+            parser_input (str | Document): Input containing sentence/s to parse.
+            Should be str for untagged input, and Document for pretagged.
 
         Returns:
             pd.DataFrame: pandas DataFrame in the format according to `self.df_format`.
 
         """
-        doc = self._pipe(string)
+        if self.pretagged and isinstance(parser_input, str):
+            msg = "Input cannot be of type string for pretagged parser"
+            raise ValueError(msg)
+        if not self.pretagged and isinstance(parser_input, Document):
+            msg = "Input cannot be of type Document for untagged parser"
+            raise ValueError(msg)
+
+        doc = self._pipe(parser_input)
         doc = cast(Document, doc)  # cast to make type checking easier
 
         df_converters = {

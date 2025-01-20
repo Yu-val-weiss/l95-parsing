@@ -66,3 +66,30 @@ def doc_to_deprel_df(doc: Document) -> pd.DataFrame:
                 )
 
     return pd.DataFrame(rows(), columns=INDEX_COLS + DEP_REL_COLS).set_index(INDEX_COLS)
+
+
+def pos_tag_df_to_doc(df: pd.DataFrame) -> Document:
+    """Convert part_of_speech tagged DF (with lemma, upos, xpos) to Stanza Document.
+
+    Args:
+        df (pd.DataFrame): part_of_speech tagged DF
+
+    Returns:
+        Document: converted Stanza Document
+
+    """
+    data = []
+    for _, sent in df.groupby(level="sent_id"):
+        sent_data = [
+            {
+                "id": word.Index[1],  # type: ignore
+                "text": word.word,
+                "lemma": word.lemma,
+                "upos": word.upos,
+                "xpos": word.xpos,
+            }
+            for word in sent.itertuples()
+        ]
+        data.append(sent_data)
+
+    return Document(data)

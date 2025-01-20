@@ -68,19 +68,19 @@ def evaluate() -> None:
     "--sentences-file",
     default=None,
     type=click.Path(exists=True),
-    help="Path to the sentences file for evaluation.",
+    help="Path to the sentences file for evaluation. Leave unspecified for default.",
 )
 @click.option(
     "--gold-file",
     default=None,
     type=click.Path(exists=True),
-    help="Path to the gold dependency relations file.",
+    help="Path to the gold dependency relations file. Leave unspecified for default.",
 )
 @click.option(
     "--save-predictions",
     default=None,
     type=click.Path(),
-    help="Path to save the prediction results.",
+    help="Path to save the prediction results. Leave unspecified to not save.",
 )
 @click.option(
     "--filter-label",
@@ -88,15 +88,28 @@ def evaluate() -> None:
     type=str,
     help="Evaluate for a specific label",
 )
+@click.option(
+    "--pretagged/--untagged",
+    default=True,
+    help="Flag if the input file is pretagged.",
+)
 def cli_eval_dep_rel(
     sentences_file: None | str = None,
     gold_file: None | str = None,
     save_predictions: None | str = None,
     filter_label: None | str = None,
+    *,
+    pretagged: bool,
 ) -> None:
     """Run dependency relation evaluation."""
     try:
-        res = eval_dep_rel(sentences_file, gold_file, save_predictions, filter_label)
+        res = eval_dep_rel(
+            sentences_file,
+            gold_file,
+            save_predictions,
+            filter_label,
+            pretagged=pretagged,
+        )
     except ValueError as v:
         raise click.BadOptionUsage(
             FILTER_LABEL_OPTION_NAME,
@@ -111,19 +124,19 @@ def cli_eval_dep_rel(
     "--sentences-file",
     default=None,
     type=click.Path(exists=True),
-    help="Path to the sentences file for evaluation.",
+    help="Path to the sentences file for evaluation. Leave unspecified for default.",
 )
 @click.option(
     "--gold-file",
     default=None,
     type=click.Path(exists=True),
-    help="Path to the gold constituency relations file.",
+    help="Path to the gold constituency relations file. Leave unspecified for default.",
 )
 @click.option(
     "--save-predictions",
     default=None,
     type=click.Path(),
-    help="Path to save the prediction results.",
+    help="Path to save the prediction results. Leave unspecified to not save.",
 )
 @click.option(
     "--parser",

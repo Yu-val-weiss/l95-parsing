@@ -8,7 +8,13 @@ from typing import TYPE_CHECKING, Literal, NamedTuple, overload
 from prettytable import PrettyTable
 
 from src.task.predict import DataFrameFormat, DependencyParser
-from src.utils.task_data import dump_dep_rel, load_dep_rel, load_sentences
+from src.utils.stanza import pos_tag_df_to_doc
+from src.utils.task_data import (
+    dump_dep_rel,
+    load_dep_rel,
+    load_pos_tags,
+    load_sentences,
+)
 
 from .score import Accuracy, EvalScore
 
@@ -89,6 +95,8 @@ def eval_dep_rel(
     gold_file: None | str = None,
     save_predictions: None | str = None,
     filter_label: None | str = None,
+    *,
+    pretagged: bool = False,
 ) -> DependencyRelationScore | SpecificDepRelScore:
     """Evaluate the Stanza's dependency relation parsing.
 
@@ -100,16 +108,26 @@ def eval_dep_rel(
         save_predictions (None | str, optional): Where to save predictions.
         Will not save if set to None.
         filter_label (None | str, optional): Label to filter on.
+        pretagged (bool, default False): Whether the data is in pre-tagged format.
 
     """
-    sentences = (
-        load_sentences() if sentences_file is None else load_sentences(sentences_file)
-    )
+    if pretagged:
+        pos_tag_df = (
+            load_pos_tags() if sentences_file is None else load_pos_tags(sentences_file)
+        )
+        sentences = pos_tag_df_to_doc(pos_tag_df)
+    else:
+        sentences = (
+            load_sentences()
+            if sentences_file is None
+            else load_sentences(sentences_file)
+        )
+        # need to convert sentences to a string for stanza
+        sentences = " ".join(sentences)
+
     gold = load_dep_rel() if gold_file is None else load_dep_rel(gold_file)
 
-    # need to convert sentences to a string for stanza
-    sentences = " ".join(sentences)
-    parser = DependencyParser(df_format=DataFrameFormat.DEPREL)
+    parser = DependencyParser(df_format=DataFrameFormat.DEPREL, pretagged=pretagged)
 
     logger.info("Parsing sentences...")
     result = parser(sentences)

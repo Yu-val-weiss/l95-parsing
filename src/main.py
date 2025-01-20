@@ -90,7 +90,7 @@ def evaluate() -> None:
 )
 @click.option(
     "--pretagged/--untagged",
-    default=True,
+    default=False,
     help="Flag if the input file is pretagged.",
 )
 def cli_eval_dep_rel(
